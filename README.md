@@ -1,2 +1,0 @@
-# Proyecto-movil
-Proyecto movil

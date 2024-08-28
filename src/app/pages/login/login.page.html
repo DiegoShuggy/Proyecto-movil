@@ -1,0 +1,19 @@
+<ion-header [translucent]="true">
+  <app-componente1 titulo="Página de Inicio" [datos]="Persona"></app-componente1>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <p *ngIf="edad < 30">{{ Persona.nombre | lowercase }}</p>
+
+  <ion-item *ngFor="let m of listaP">
+    <ion-label><b>ID:</b> {{ m.id }}</ion-label>
+    <ion-label><b>Nombre de la Comuna:</b> {{ m.comuna | uppercase }}</ion-label>
+  </ion-item>
+
+  <ion-item>
+    <ion-input label="Nombre Usuario" labelPlacement="floating" placeholder="Ingrese su nombre de usuario" [(ngModel)]="usuario"></ion-input>
+  </ion-item>
+  <mat-spinner></mat-spinner>
+  <ion-button color="success" [routerLink]="['/home']">Ir a Home {{ usuario }}</ion-button>
+  <ion-button color="warning" (click)="irPagina()">Ir a Agregar</ion-button>
+</ion-content>
