@@ -1,30 +1,49 @@
+ion-content {
+  --background: none; /* Resetea cualquier fondo por defecto */
+  background-image: url('/assets/icon/logo.png'); /* Asegúrate de que la ruta sea correcta */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 h1 {
-    text-align: center;
-    color: #3880ff; /* Color principal de Ionic */
-  }
-  h2 {
-    text-align: center;
-    color: #3880ff; /* Color principal de Ionic */
-  }  
+  text-align: center;
+  position: absolute; /* Permite posicionar el texto absolutamente dentro del contenedor */
+  top: 0; /* Alinea el texto con la parte superior del contenedor */
+  left: 0; /* Asegura que se alinee desde la izquierda */
+  right: 0; /* Asegura que se alinee hasta la derecha */
+  padding: 10px; /* Espacio alrededor del texto */
+  color: #3880ff;
+  /* Color principal de Ionic */
+}
 
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Centra horizontalmente */
-    justify-content: center; /* Centra verticalmente */
-    height: 100%; /* Asegura que el contenedor ocupe toda la altura del contenido */
-    text-align: center;
-  }
-  
-  .button-group {
-    display: flex;
-    flex-direction: column;
-    gap: 16px; /* Espacio entre los botones */
-    width: 100%;
-    justify-content: center;
-  }
-  
-  ion-button {
-    width: 50%; /* O el porcentaje o tamaño que desees para los botones */
-  }
-  
+h2 {
+  text-align: center;
+  color: #3880ff;
+  /* Color principal de Ionic */
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Centra horizontalmente */
+  justify-content: center;
+  /* Centra verticalmente */
+  height: 100%;
+  /* Asegura que el contenedor ocupe toda la altura del contenido */
+  text-align: center;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  /* Espacio entre los botones */
+  width: 100%;
+  justify-content: center;
+}
+
+ion-button {
+  width: 50%;
+  /* O el porcentaje o tamaño que desees para los botones */
+}
