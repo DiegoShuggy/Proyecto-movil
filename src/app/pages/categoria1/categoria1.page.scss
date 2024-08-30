@@ -1,11 +1,11 @@
 ion-content {
-    --background: #f0f0f0; /* Cambia este valor por el color que desees */
+    --background: #f0f0f0; /* fondo */
   }
   ion-card {
   display: flex;
   align-items: center;
-  padding: 20px; /* Espaciado interno para la tarjeta */
-  margin-bottom: 50px; /* Espaciado entre tarjetas */
+  padding: 20px; /* espacio de la tarjeta */
+  margin-bottom: 50px; /* espacio entre tarjetas */
 
   ion-card-header {
     flex: 1; /* Ocupa todo el espacio disponible a la izquierda */
