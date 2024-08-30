@@ -8,7 +8,7 @@ import { NavController } from '@ionic/angular';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  loginForm: FormGroup;
+  loginForm!: FormGroup;
   errorMessage: string | null = null;
 
   constructor(private fb: FormBuilder, private navCtrl: NavController) { }
