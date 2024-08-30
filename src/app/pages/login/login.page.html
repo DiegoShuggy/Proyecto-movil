@@ -1,22 +1,23 @@
-<ion-header [translucent]="true">
-  <app-componente1 titulo="Página de Inicio" [datos]="Persona"></app-componente1>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Iniciar Sesión</ion-title>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <p *ngIf="edad < 30">{{ Persona.nombre | lowercase }}</p>
+<ion-content class="ion-padding">
+  <h2>Inicio de Sesión</h2>
 
-  <ion-item *ngFor="let m of listaP">
-    <ion-label><b>ID:</b> {{ m.id }}</ion-label>
-    <ion-label><b>Nombre de la Comuna:</b> {{ m.comuna | uppercase }}</ion-label>
-  </ion-item>
+  <form (ngSubmit)="onSubmit()" [formGroup]="loginForm">
+    <ion-item>
+      <ion-label position="floating">Correo Electrónico</ion-label>
+      <ion-input formControlName="email" type="email"></ion-input>
+    </ion-item>
 
-  <ion-item>
-    <ion-input label="Nombre Usuario" labelPlacement="floating" placeholder="Ingrese su nombre de usuario" [(ngModel)]="usuario"></ion-input>
-  </ion-item>
-  <mat-spinner></mat-spinner>
-  <ion-button color="success" [routerLink]="['/home']">Ir a Home {{ usuario }}</ion-button>
-  <ion-button color="success" [routerLink]="['/categoria1']">Ir a categoria1 {{ usuario }}</ion-button>
-  
-  <ion-button color="warning" (click)="irPagina()">Ir a Agregar</ion-button>
-  
+    <ion-item>
+      <ion-label position="floating">Contraseña</ion-label>
+      <ion-input formControlName="password" type="password"></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" type="submit">Iniciar Sesión</ion-button>
+  </form>
 </ion-content>

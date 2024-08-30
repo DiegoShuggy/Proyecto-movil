@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationExtras, Router } from '@angular/router';
-import { AlertController, ToastController } from '@ionic/angular';
-
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -9,68 +8,30 @@ import { AlertController, ToastController } from '@ionic/angular';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
+  loginForm: FormGroup;
+  errorMessage: string | null = null;
 
-  apellido: string = "Rodriguez";
-  edad: number = 25;
-  usuario: string = "dd";
-
-  Persona: any = {
-    nombre: 'José',
-    apellido: 'Josca',
-    edad: 35
-  }
-
-  listaP: any = [
-    {
-      id: 5,
-      comuna: 'Lo espejo'
-    },
-    {
-      id: 7,
-      comuna: 'Las Condes'
-    },
-    {
-      id: 9,
-      comuna: 'Huechuraba'
-    }
-  ]
-  constructor(private router: Router, private alertController: AlertController, private toastController: ToastController) { }
+  constructor(private fb: FormBuilder, private navCtrl: NavController) { }
 
   ngOnInit() {
-  }
-  async presentToast(position: 'top' | 'middle' | 'bottom') {
-    const toast = await this.toastController.create({
-      message: 'Hello World!',
-      duration: 2500,
-      position: position,
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
     });
-
-    await toast.present();
   }
 
-  async presentAlert(titulo:string, texto:string) {
-    const alert = await this.alertController.create({
-      header: titulo,
-      message: texto,
-      buttons: ['OK'],
-    });
-
-    await alert.present();
-  }
-
-  irPagina(){
-    //declarar mi variable de contexto para enviar la información
-    let navigationextras: NavigationExtras = {
-      state:{
-        ape: this.apellido,
-        ed: this.edad,
-        user: this.usuario
-      }
+  onSubmit() {
+    if (this.loginForm.invalid) {
+      return;
     }
-    this.presentToast('bottom');
-    //this.presentAlert('Soy un titulo', 'Soy un mensaje');
-    //aqui se puede ejecutar logica de codigo
-    this.router.navigate(['/agregar'], navigationextras);
-  }
 
+    const { email, password } = this.loginForm.value;
+
+    if ((email === 'pedro@gmail.com' && password === '1234') || 
+        (email === 'admin@gmail.com' && password === 'admin')) {
+      this.navCtrl.navigateForward('/home'); // Redirige a la página de inicio
+    } else {
+      this.errorMessage = 'Correo electrónico o contraseña incorrectos';
+    }
+  }
 }
