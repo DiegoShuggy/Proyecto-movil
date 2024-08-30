@@ -60,12 +60,16 @@ const routes: Routes = [
     path: 'producto5',
     loadChildren: () => import('./pages/producto5/producto5.module').then( m => m.Producto5PageModule)
   },
-  
+
+  {
+    path: 'home-admin',
+    loadChildren: () => import('./pages/home-admin/home-admin.module').then( m => m.HomeAdminPageModule)
+  },
+
   {
     path: '**',
     loadChildren: () => import('./pages/notfound/notfound.module').then(m => m.NotfoundPageModule)
   },
- 
 
 
 

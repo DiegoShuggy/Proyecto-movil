@@ -1,37 +1,43 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NavController } from '@ionic/angular';
+import { Component } from '@angular/core';
+import { AlertController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
-  loginForm: FormGroup;
-  errorMessage: string | null = null;
+export class LoginPage {
+  email: string = '';
+  password: string = '';
+  errorMessage: string = '';
 
-  constructor(private fb: FormBuilder, private navCtrl: NavController) { }
-
-  ngOnInit() {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
-    });
-  }
+  constructor(private alertController: AlertController, private navCtrl: NavController) {}
 
   onSubmit() {
-    if (this.loginForm.invalid) {
-      return;
-    }
-
-    const { email, password } = this.loginForm.value;
-
-    if ((email === 'pedro@gmail.com' && password === '1234') || 
-        (email === 'admin@gmail.com' && password === 'admin')) {
-      this.navCtrl.navigateForward('/home'); // Redirige a la página de inicio
+    // Validar las credenciales
+    if (this.email === 'pepe@gmail.com' && this.password === '1234') {
+      this.presentAlert('Inicio de sesión exitoso', 'Has iniciado sesión correctamente.', '/home');
+    } else if (this.email === 'admin@gmail.com' && this.password === 'admin') {
+      this.presentAlert('Inicio de sesión exitoso', 'Has iniciado sesión como administrador.', '/home-admin');
     } else {
-      this.errorMessage = 'Correo electrónico o contraseña incorrectos';
+      this.errorMessage = 'Correo o contraseña incorrectos';
     }
+  }
+
+  async presentAlert(header: string, message: string, redirectUrl: string) {
+    const alert = await this.alertController.create({
+      header,
+      message,
+      buttons: [
+        {
+          text: 'Aceptar',
+          handler: () => {
+            this.navCtrl.navigateRoot(redirectUrl);  // Redirigir según el rol
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 }

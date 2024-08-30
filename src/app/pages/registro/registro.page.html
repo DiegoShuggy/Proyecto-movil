@@ -1,26 +1,35 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Registrarse</ion-title>
+    <ion-title>Registro</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <h2>Página de Registro</h2>
+  <form (ngSubmit)="onSubmit()">
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input type="email" [(ngModel)]="email" name="email" required></ion-input>
+    </ion-item>
+    <div *ngIf="!email && submitted" class="validation-error">
+      El email es requerido.
+    </div>
 
-  <ion-item>
-    <ion-label position="floating">Correo Electrónico</ion-label>
-    <ion-input type="email"></ion-input>
-  </ion-item>
+    <ion-item>
+      <ion-label position="floating">Contraseña</ion-label>
+      <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
+    </ion-item>
+    <div *ngIf="!password && submitted" class="validation-error">
+      La contraseña es requerida.
+    </div>
 
-  <ion-item>
-    <ion-label position="floating">Contraseña</ion-label>
-    <ion-input type="floating"></ion-input>
-  </ion-item>
+    <ion-item>
+      <ion-label position="floating">Confirmar Contraseña</ion-label>
+      <ion-input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required></ion-input>
+    </ion-item>
+    <div *ngIf="password !== confirmPassword && submitted" class="validation-error">
+      Las contraseñas no coinciden.
+    </div>
 
-  <ion-item>
-    <ion-label position="floating">Repetir contraseña</ion-label>
-    <ion-input type="floating"></ion-input>
-  </ion-item>
-
-  <ion-button expand="block">Registrarse</ion-button>
+    <ion-button expand="full" type="submit">Registrarse</ion-button>
+  </form>
 </ion-content>
