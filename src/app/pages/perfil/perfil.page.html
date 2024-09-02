@@ -1,0 +1,38 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-menu-button slot="start"></ion-menu-button>
+    <ion-title>Perfil de Usuario</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Nombre -->
+  <ion-item>
+    <ion-label position="stacked">Nombre</ion-label>
+    <ion-input [(ngModel)]="nombre" readonly></ion-input>
+    <ion-button expand="full" fill="outline" (click)="editField('Nombre')">Editar</ion-button>
+  </ion-item>
+
+  <!-- Correo -->
+  <ion-item>
+    <ion-label position="stacked">Correo</ion-label>
+    <ion-input [(ngModel)]="correo" readonly></ion-input>
+    <ion-button expand="full" fill="outline" (click)="editField('Correo')">Editar</ion-button>
+  </ion-item>
+
+  <!-- Contraseña -->
+  <ion-item>
+    <ion-label position="stacked">Contraseña</ion-label>
+    <ion-input [(ngModel)]="contrasena" type="password" readonly></ion-input>
+    <ion-button expand="full" fill="outline" (click)="editField('Contraseña')">Editar</ion-button>
+  </ion-item>
+
+  <!-- Dirección -->
+  <ion-item>
+    <ion-label position="stacked">Dirección</ion-label>
+    <ion-input [(ngModel)]="direccion" readonly></ion-input>
+    <ion-button expand="full" fill="outline" (click)="editField('Dirección')">Editar</ion-button>
+  </ion-item>
+
+</ion-content>
