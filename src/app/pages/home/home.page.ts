@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
 
+
 interface Category {
   name: string;
   route: string;
