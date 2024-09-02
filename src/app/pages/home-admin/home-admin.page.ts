@@ -14,8 +14,8 @@ interface AdminSection {
 })
 export class HomeAdminPage {
   adminSections: AdminSection[] = [
-    { name: 'Gestión de Categorías', route: 'gestion-categorias', image: 'assets/img/Gestion-Categorias' },
-    { name: 'Gestión de Productos', route: 'gestion-productos', image: 'assets/img/Gestion-Productos.jpg' }
+    { name: 'Gestión de Categorías', route: 'gestion-categorias', image: 'assets/icon/categoria.png' },
+    { name: 'Gestión de Productos', route: 'gestion-productos', image: 'assets/icon/categoria.png' }
     // Agrega más secciones según sea necesario
   ];
 

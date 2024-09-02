@@ -8,9 +8,9 @@ import { AlertController } from '@ionic/angular';
 })
 export class GestionCategoriasPage implements OnInit {
   categories = [
-    { name: 'Accesorios', image: 'assets/imgs/accesorios.jpg' },
-    { name: 'Loza/Vajilla/Cerámica', image: 'assets/imgs/loza.jpg' },
-    { name: 'Manteles Mesa/Individuales', image: 'assets/imgs/manteles.jpg' }
+    { name: 'Accesorios', image: 'assets/icon/categoria2.jfif' },
+    { name: 'Loza/Vajilla/Cerámica', image: 'assets/icon/categoria2.jfif' },
+    { name: 'Manteles Mesa/Individuales', image: 'assets/icon/categoria2.jfif' }
     // Puedes agregar más categorías aquí
   ];
 
