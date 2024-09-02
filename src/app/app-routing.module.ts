@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
+
 const routes: Routes = [
   {
     path: '',
@@ -65,11 +66,53 @@ const routes: Routes = [
     path: 'home-admin',
     loadChildren: () => import('./pages/home-admin/home-admin.module').then( m => m.HomeAdminPageModule)
   },
+  {
+    path: 'producto6',
+    loadChildren: () => import('./pages/producto6/producto6.module').then( m => m.Producto6PageModule)
+  },
+  {
+    path: 'producto7',
+    loadChildren: () => import('./pages/producto7/producto7.module').then( m => m.Producto7PageModule)
+  },
+  {
+    path: 'producto8',
+    loadChildren: () => import('./pages/producto8/producto8.module').then( m => m.Producto8PageModule)
+  },
+  {
+    path: 'producto9',
+    loadChildren: () => import('./pages/producto9/producto9.module').then( m => m.Producto9PageModule)
+  },
+  {
+    path: 'producto10',
+    loadChildren: () => import('./pages/producto10/producto10.module').then( m => m.Producto10PageModule)
+  },
+  {
+    path: 'producto11',
+    loadChildren: () => import('./pages/producto11/producto11.module').then( m => m.Producto11PageModule)
+  },
+  {
+    path: 'producto12',
+    loadChildren: () => import('./pages/producto12/producto12.module').then( m => m.Producto12PageModule)
+  },
+  {
+    path: 'producto13',
+    loadChildren: () => import('./pages/producto13/producto13.module').then( m => m.Producto13PageModule)
+  },
+  {
+    path: 'producto14',
+    loadChildren: () => import('./pages/producto14/producto14.module').then( m => m.Producto14PageModule)
+  },
+  {
+    path: 'producto15',
+    loadChildren: () => import('./pages/producto15/producto15.module').then( m => m.Producto15PageModule)
+  },
 
   {
     path: '**',
     loadChildren: () => import('./pages/notfound/notfound.module').then(m => m.NotfoundPageModule)
   },
+  
+
 
 
 
