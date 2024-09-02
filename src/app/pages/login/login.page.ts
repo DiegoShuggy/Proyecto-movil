@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController, NavController } from '@ionic/angular';
+import { AlertController, NavController, MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +11,21 @@ export class LoginPage {
   password: string = '';
   errorMessage: string = '';
 
-  constructor(private alertController: AlertController, private navCtrl: NavController) {}
+  constructor(
+    private alertController: AlertController,
+    private navCtrl: NavController,
+    private menuCtrl: MenuController  // Inyección de MenuController
+  ) {}
+
+  // Deshabilitar el menú cuando se entra a la página
+  ionViewWillEnter() {
+    this.menuCtrl.enable(false);  // Desactiva el menú lateral
+  }
+
+  // Rehabilitar el menú cuando se sale de la página
+  ionViewWillLeave() {
+    this.menuCtrl.enable(true);  // Activa el menú lateral nuevamente
+  }
 
   onSubmit() {
     // Validar las credenciales

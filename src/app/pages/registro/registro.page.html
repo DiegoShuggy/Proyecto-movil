@@ -1,35 +1,44 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
     <ion-title>Registro</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form (ngSubmit)="onSubmit()">
-    <ion-item>
-      <ion-label position="floating">Email</ion-label>
-      <ion-input type="email" [(ngModel)]="email" name="email" required></ion-input>
-    </ion-item>
-    <div *ngIf="!email && submitted" class="validation-error">
-      El email es requerido.
-    </div>
+  <div class="form-container">
+    <form (ngSubmit)="onSubmit()">
+      <ion-item class="form-item">
+        <ion-label position="floating">Email</ion-label>
+        <ion-input type="email" [(ngModel)]="email" name="email" required></ion-input>
+      </ion-item>
+      <div *ngIf="!email && submitted" class="validation-error">
+        El email es requerido.
+      </div>
 
-    <ion-item>
-      <ion-label position="floating">Contraseña</ion-label>
-      <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
-    </ion-item>
-    <div *ngIf="!password && submitted" class="validation-error">
-      La contraseña es requerida.
-    </div>
+      <ion-item class="form-item">
+        <ion-label position="floating">Contraseña</ion-label>
+        <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
+      </ion-item>
+      <div *ngIf="!password && submitted" class="validation-error">
+        La contraseña es requerida.
+      </div>
 
-    <ion-item>
-      <ion-label position="floating">Confirmar Contraseña</ion-label>
-      <ion-input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required></ion-input>
-    </ion-item>
-    <div *ngIf="password !== confirmPassword && submitted" class="validation-error">
-      Las contraseñas no coinciden.
-    </div>
+      <ion-item class="form-item">
+        <ion-label position="floating">Confirmar Contraseña</ion-label>
+        <ion-input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required></ion-input>
+      </ion-item>
+      <div *ngIf="password !== confirmPassword && submitted" class="validation-error">
+        Las contraseñas no coinciden.
+      </div>
 
-    <ion-button expand="full" type="submit">Registrarse</ion-button>
-  </form>
+      <ion-text color="medium" class="terms-text">
+        <p>Al hacer clic en Registrarse, aceptas los <a href="#">Términos y Condiciones</a></p>
+      </ion-text>
+
+      <ion-button expand="full" type="submit" class="submit-button">Registrarse</ion-button>
+    </form>
+  </div>
 </ion-content>
