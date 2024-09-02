@@ -1,13 +1,63 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>categoria2</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Loza/Vajilla/Cerámica</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">categoria2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+
+  <!-- Producto 6 -->
+  <ion-card color="primary" button [routerLink]="['/producto6']">
+    <ion-card-header>
+      <ion-card-title>Set de platos de cerámica</ion-card-title>
+      <ion-card-subtitle>Loza/Platos/Cerámica</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content> Precio: $19.999 </ion-card-content>
+    <img src="/assets/icon/producto6.png" alt="Imagen del Producto">
+  </ion-card>
+
+  <!-- Producto 7 -->
+  <ion-card color="primary" button [routerLink]="['/producto7']">
+    <ion-card-header>
+      <ion-card-title>Set de platos y taza de cerámica</ion-card-title>
+      <ion-card-subtitle>Loza/Platos/Taza</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content> Precio: $12.999 </ion-card-content>
+    <img src="/assets/icon/producto7.png" alt="Imagen del Producto" id="img2">
+  </ion-card>
+
+  <!-- Producto 8 -->
+  <ion-card color="primary" button [routerLink]="['/producto8']">
+    <ion-card-header>
+      <ion-card-title>Taza de cerámica</ion-card-title>
+      <ion-card-subtitle>Loza/Taza/Cerámica</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content> Precio: $6.999 </ion-card-content>
+    <img src="/assets/icon/producto8.png" alt="Imagen del Producto">
+  </ion-card>
+
+  <!-- Producto 9 -->
+  <ion-card color="primary" button [routerLink]="['/producto9']">
+    <ion-card-header>
+      <ion-card-title>Tetera de cerámica</ion-card-title>
+      <ion-card-subtitle>Loza/Tetera/Cerámica</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content> Precio: $11.999 </ion-card-content>
+    <img src="/assets/icon/producto9.png" alt="Imagen del Producto">
+  </ion-card>
+
+   <!-- Producto 10 -->
+   <ion-card color="primary" button [routerLink]="['/producto10']">
+    <ion-card-header>
+      <ion-card-title>Set de utencilios de madera</ion-card-title>
+      <ion-card-subtitle>Tenedor/Cuchara/Madera</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content> Precio: $5.999 </ion-card-content>
+    <img src="/assets/icon/producto10.png" alt="Imagen del Producto">
+  </ion-card>
+
+
 </ion-content>

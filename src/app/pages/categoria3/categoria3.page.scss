@@ -1,3 +1,39 @@
 ion-content {
-    --background: #f0f0f0; /* Cambia este valor por el color que desees */
-  }
+  --background: #f0f0f0; /* fondo */
+}
+ion-card {
+display: flex;
+align-items: center;
+padding: 20px; /* espacio de la tarjeta */
+margin-bottom: 50px; /* espacio entre tarjetas */
+
+ion-card-header {
+  flex: 1; /* Ocupa todo el espacio disponible a la izquierda */
+  padding-right: 10px; /* Espacio entre el texto y la imagen */
+}
+
+img {
+  width: 200px; /* Ajusta el ancho de la imagen */
+  height: auto; /* Mantiene la proporción de la imagen */
+  margin-left: auto; /* Asegura que la imagen esté alineada a la derecha */
+}
+
+ion-card-title {
+  font-size: 2.0em; /* Tamaño de fuente para el título */
+  font-weight: bold;
+  color: #0c0c0c; /* Color del texto del título */
+  margin: 0; /* Elimina el margen */
+}
+
+ion-card-subtitle {
+  font-size: 1.5em; /* Tamaño de fuente para el subtítulo */
+  color: #0c0c0c; /* Color del texto del subtítulo */
+  margin: 0; /* Elimina el margen */
+}
+
+ion-card-content {
+  font-size: 1.5em; /* Tamaño de fuente para el contenido */
+  color: #0c0c0c; /* Color del texto del contenido */
+  margin-top: 0px; /* Espacio encima del contenido */
+}
+}
