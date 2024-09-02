@@ -1,3 +1,13 @@
+ion-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.logout-button {
+  margin-top: auto;
+}
+
 ion-menu {
     --width: 250px; /* Ajusta el ancho del menú */
   }
@@ -9,4 +19,5 @@ ion-menu {
   ion-menu .ion-title {
     color: #fff; /* Cambia el color del título del menú */
   }
+  
   

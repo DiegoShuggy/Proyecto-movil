@@ -112,6 +112,7 @@ const routes: Routes = [
     { path: 'products/categoria1', loadChildren: () => import('./pages/categoria1/categoria1.module').then(m => m.Categoria1PageModule) },
     { path: 'products/categoria2', loadChildren: () => import('./pages/categoria2/categoria2.module').then(m => m.Categoria2PageModule) },
     { path: 'products/categoria3', loadChildren: () => import('./pages/categoria3/categoria3.module').then(m => m.Categoria3PageModule) },
+    
 
   {
     path: 'gestion-categorias',
