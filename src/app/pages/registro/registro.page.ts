@@ -7,6 +7,7 @@ import { AlertController, NavController, MenuController } from '@ionic/angular';
   styleUrls: ['./registro.page.scss'],
 })
 export class RegistroPage {
+  name: string = '';  // Agregado para el campo de nombre
   email: string = '';
   password: string = '';
   confirmPassword: string = '';
@@ -15,7 +16,7 @@ export class RegistroPage {
   constructor(
     private alertController: AlertController,
     private navCtrl: NavController,
-    private menuCtrl: MenuController  // Nota el cambio aquí
+    private menuCtrl: MenuController
   ) {}
 
   // Deshabilitar el menú cuando se entra a la página
@@ -32,7 +33,7 @@ export class RegistroPage {
     this.submitted = true;
 
     // Validar que los campos no estén vacíos y las contraseñas coincidan
-    if (this.email && this.password && this.confirmPassword && this.password === this.confirmPassword) {
+    if (this.name && this.email && this.password && this.confirmPassword && this.password === this.confirmPassword) {
       this.presentAlert();  // Mostrar alerta después de un registro exitoso
     } else {
       console.log('Faltan campos por llenar o las contraseñas no coinciden');
