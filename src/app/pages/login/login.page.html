@@ -4,21 +4,29 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <form (ngSubmit)="onSubmit()">
-    <ion-item>
-      <ion-label position="floating">Email</ion-label>
-      <ion-input type="email" [(ngModel)]="email" name="email" required></ion-input>
-    </ion-item>
-    <div *ngIf="errorMessage" class="validation-error">
-      {{ errorMessage }}
-    </div>
+<ion-content>
+  <div class="form-container">
+    <form (ngSubmit)="onSubmit()">
+      <ion-item class="form-item">
+        <ion-label position="floating">Email</ion-label>
+        <ion-input type="email" [(ngModel)]="email" name="email" required></ion-input>
+      </ion-item>
+      <div *ngIf="errorMessage && !email" class="validation-error">
+        El email es requerido.
+      </div>
 
-    <ion-item>
-      <ion-label position="floating">Contraseña</ion-label>
-      <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
-    </ion-item>
+      <ion-item class="form-item">
+        <ion-label position="floating">Contraseña</ion-label>
+        <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
+      </ion-item>
+      <div *ngIf="errorMessage && !password" class="validation-error">
+        La contraseña es requerida.
+      </div>
+      <div *ngIf="errorMessage && (email && password)" class="validation-error">
+        {{ errorMessage }}
+      </div>
 
-    <ion-button expand="full" type="submit">Iniciar sesión</ion-button>
-  </form>
+      <ion-button expand="full" type="submit" class="submit-button">Iniciar sesión</ion-button>
+    </form>
+  </div>
 </ion-content>

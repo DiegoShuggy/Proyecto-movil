@@ -107,11 +107,26 @@ const routes: Routes = [
     loadChildren: () => import('./pages/producto15/producto15.module').then( m => m.Producto15PageModule)
   },
 
+    { path: '', redirectTo: 'home', pathMatch: 'full' },
+    { path: 'home', loadChildren: () => import('./pages/home/home.module').then(m => m.HomePageModule) },
+    { path: 'products/categoria1', loadChildren: () => import('./pages/categoria1/categoria1.module').then(m => m.Categoria1PageModule) },
+    { path: 'products/categoria2', loadChildren: () => import('./pages/categoria2/categoria2.module').then(m => m.Categoria2PageModule) },
+    { path: 'products/categoria3', loadChildren: () => import('./pages/categoria3/categoria3.module').then(m => m.Categoria3PageModule) },
+
   {
-    path: '**',
-    loadChildren: () => import('./pages/notfound/notfound.module').then(m => m.NotfoundPageModule)
+    path: 'gestion-categorias',
+    loadChildren: () => import('./pages/gestion-categorias/gestion-categorias.module').then( m => m.GestionCategoriasPageModule)
   },
   
+  {
+    path: 'gestion-productos',
+    loadChildren: () => import('./pages/gestion-productos/gestion-productos.module').then( m => m.GestionProductosPageModule)
+  },
+
+    {
+    path: '**',
+    loadChildren: () => import('./pages/notfound/notfound.module').then(m => m.NotfoundPageModule)
+  }
 
 
 
