@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { NavController, AlertController, MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-gestion-categorias',
@@ -14,7 +14,11 @@ export class GestionCategoriasPage implements OnInit {
     // Puedes agregar más categorías aquí
   ];
 
-  constructor(private alertController: AlertController) {}
+  constructor(
+    private alertController: AlertController,
+    private navCtrl: NavController,
+    private menuCtrl: MenuController
+  ) {}
 
   ngOnInit() {}
 
@@ -36,5 +40,18 @@ export class GestionCategoriasPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  // Método para cerrar sesión
+  logout() {
+    this.navCtrl.navigateRoot('/inicio');
+  }
+
+  ionViewWillEnter() {
+    this.menuCtrl.enable(false);  // Desactiva el menú lateral
+  }
+
+  ionViewWillLeave() {
+    this.menuCtrl.enable(true);  // Activa el menú lateral nuevamente
   }
 }
