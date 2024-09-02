@@ -1,0 +1,36 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Seguimiento</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="main">
+</ion-content>
+
+<ion-button color="light" id="open-modal" expand="block">Más información</ion-button>
+
+<ion-modal #modal trigger="open-modal" [initialBreakpoint]="0.4" [breakpoints]="[0, 0.25, 0.4, 0.4]">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Información de Entrega</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-item>
+          <ion-label>Tiempo de llegada:</ion-label>
+          <ion-text>15:30 hrs</ion-text> <ion-icon name="time-outline"></ion-icon>
+        </ion-item>
+        <ion-item>
+          <ion-label>Tu dirección:</ion-label>
+          <ion-text>Av. Siempre Viva 123, Quilicura</ion-text><ion-icon name="compass-outline"></ion-icon>
+        </ion-item>
+      </ion-list>
+      <ion-button class="llamar" color="primary" expand="block">
+        <ion-icon name="call" slot="start"></ion-icon>
+        Llame a su repartidor
+      </ion-button>
+    </ion-content>
+  </ng-template>
+</ion-modal>

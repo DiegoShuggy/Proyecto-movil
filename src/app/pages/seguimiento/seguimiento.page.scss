@@ -1,0 +1,18 @@
+.main {
+    --background: none;
+    background-image: url('/assets/icon/mapa.png');
+    background-size: cover;
+    /* Ajusta el tamaño de la imagen */
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.llamar {
+    font-size: 2em;
+    /* Tamaño de la fuente más grande */
+    padding: 1em;
+    /* Espaciado interno más grande */
+    width: 90%;
+    /* Ancho del botón */
+    margin: 1em auto;
+    /* Centrar el botón */
+}
