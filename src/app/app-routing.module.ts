@@ -123,10 +123,29 @@ const routes: Routes = [
     loadChildren: () => import('./pages/gestion-productos/gestion-productos.module').then( m => m.GestionProductosPageModule)
   },
 
+  {
+    path: 'carrito',
+    loadChildren: () => import('./pages/carrito/carrito.module').then( m => m.CarritoPageModule)
+  },
+  {
+    path: 'address',
+    loadChildren: () => import('./pages/address/address.module').then( m => m.AddressPageModule)
+  },
+  {
+    path: 'pago',
+    loadChildren: () => import('./pages/pago/pago.module').then( m => m.PagoPageModule)
+  },
+  {
+    path: 'confirmacion',
+    loadChildren: () => import('./pages/confirmacion/confirmacion.module').then( m => m.ConfirmacionPageModule)
+  },
+
     {
     path: '**',
     loadChildren: () => import('./pages/notfound/notfound.module').then(m => m.NotfoundPageModule)
-  }
+  },
+ 
+
 
 
 

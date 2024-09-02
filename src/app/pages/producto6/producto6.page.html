@@ -28,7 +28,7 @@
               Añadir al carro</ion-button>
             <ion-toast trigger="open-toast" message="El producto se agrego al carro Muchas gracias"
               [duration]="5000"></ion-toast>
-            <ion-button color="danger">
+            <ion-button color="danger" [routerLink]="['/carrito']">
               <ion-icon slot="start" name="cash"></ion-icon>
               Comprar ya
             </ion-button>

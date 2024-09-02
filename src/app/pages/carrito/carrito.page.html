@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Carrito de Compra</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="cart-container">
+    <div class="product">
+      <ion-card class="small-card">
+        <ion-card-header>
+          <ion-card-title class="large-text">Collar con pompones</ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="large-text">
+          Collar/Bisutería artesanal
+        </ion-card-content>
+        <img src="/assets/icon/producto1.png" alt="Imagen del Producto">
+      </ion-card>
+    </div>
+    <div class="product">
+      <ion-card class="small-card">
+        <ion-card-header>
+          <ion-card-title class="large-text">Mantel de mesa individual</ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="large-text">
+          Mantel/Individual
+        </ion-card-content>
+        <img src="/assets/icon/producto15.png" alt="Imagen del Producto">
+      </ion-card>
+    </div>
+
+    <div class="total-cost">
+      <ion-item>
+        <ion-label>Total:</ion-label>
+        <h3><ion-note slot="end">$15.998</ion-note></h3>
+      </ion-item>
+    </div>
+
+    <ion-button expand="full" type="button" [routerLink]="['/address']">Ingresa dirección para enviar</ion-button>
+  </div>
+</ion-content>
+
+
+
+
+

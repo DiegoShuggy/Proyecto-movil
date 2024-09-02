@@ -1,0 +1,43 @@
+ion-content {
+  --background: #f0f0f0;
+  /* fondo */
+}
+
+.cart-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 130%;
+}
+
+ion-button {
+  width: 100%;
+  max-width: 400px;
+}
+
+.product {
+  width: 100%;
+  max-width: 270px;
+  margin-bottom: 0px;
+}
+
+.small-card {
+  width: 1000%;
+  max-width: 250px;
+}
+
+.large-text {
+  font-size: 1.5em;
+}
+
+.total-cost {
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 20px;
+}
+
+ion-button {
+  width: 100%;
+  max-width: 300px;
+}

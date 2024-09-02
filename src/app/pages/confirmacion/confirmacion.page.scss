@@ -1,0 +1,15 @@
+ion-content {
+    --background: #f0f0f0; /* fondo */
+  }
+
+  .form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  form {
+    width: 100%;
+    max-width: 400px;
+  }
