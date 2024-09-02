@@ -14,14 +14,10 @@ interface AdminSection {
 })
 export class HomeAdminPage {
   adminSections: AdminSection[] = [
-<<<<<<< HEAD
+
     { name: 'Gestión de Categorías', route: 'gestion-categorias', image: 'assets/icon/categoria.png' },
     { name: 'Gestión de Productos', route: 'gestion-productos', image: 'assets/icon/categoria.png' }
-=======
-    { name: 'Gestión de Categorías', route: 'gestion-categorias', image: 'assets/img/Gestion-Categorias.jpg' },
-    { name: 'Gestión de Productos', route: 'gestion-productos', image: 'assets/img/Gestion-Productos.jpg' }
->>>>>>> c52328995b8c0fb5fd61270be6549a06d4d5ff64
-    // Agrega más secciones según sea necesario
+
   ];
 
   constructor(private navCtrl: NavController, private menuCtrl: MenuController) {}
