@@ -7,36 +7,64 @@
 
 <ion-content>
   <div class="form-container">
-    <form>
-      <ion-item>
+    <form (ngSubmit)="onSubmit()">
+      <ion-item class="form-item">
         <ion-label position="floating">Ciudad</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="text" [(ngModel)]="ciudad" name="ciudad" required></ion-input>
       </ion-item>
+      <div *ngIf="!ciudad && formSubmitted" class="validation-error">
+        La ciudad es requerida.
+      </div>
+      <div *ngIf="!ciudadValid && ciudad && formSubmitted" class="validation-error">
+        La ciudad solo puede contener letras.
+      </div>
 
-      <ion-item>
+      <ion-item class="form-item">
         <ion-label position="floating">Comuna</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="text" [(ngModel)]="comuna" name="comuna" required></ion-input>
       </ion-item>
+      <div *ngIf="!comuna && formSubmitted" class="validation-error">
+        La comuna es requerida.
+      </div>
+      <div *ngIf="!comunaValid && comuna && formSubmitted" class="validation-error">
+        La comuna solo puede contener letras.
+      </div>
 
-      <ion-item>
+      <ion-item class="form-item">
         <ion-label position="floating">Código Postal</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="text" [(ngModel)]="codigoPostal" name="codigoPostal" pattern="[0-9]*" required></ion-input>
       </ion-item>
+      <div *ngIf="!codigoPostal && formSubmitted" class="validation-error">
+        El código postal es requerido.
+      </div>
+      <div *ngIf="!codigoPostalValid && codigoPostal && formSubmitted" class="validation-error">
+        El código postal solo puede contener números.
+      </div>
 
-      <ion-item>
+      <ion-item class="form-item">
         <ion-label position="floating">Dirección de Casa</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="text" [(ngModel)]="direccion" name="direccion" required></ion-input>
       </ion-item>
+      <div *ngIf="!direccion && formSubmitted" class="validation-error">
+        La dirección es requerida.
+      </div>
 
-      <ion-item>
+      <ion-item class="form-item">
         <ion-label position="floating">Teléfono para Contactar</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="text" [(ngModel)]="telefono" name="telefono" pattern="[0-9]*" maxlength="9" required></ion-input>
       </ion-item>
+      <div *ngIf="!telefono && formSubmitted" class="validation-error">
+        El teléfono es requerido.
+      </div>
+      <div *ngIf="!telefonoValid && telefono && formSubmitted" class="validation-error">
+        El teléfono debe contener solo 9 números.
+      </div>
 
-      <ion-button expand="full" type="submit" [routerLink]="['/confirmacion']">Continuar con el pago</ion-button>
+      <div *ngIf="errorMessage" class="validation-error">
+        {{ errorMessage }}
+      </div>
+
+      <ion-button expand="full" type="submit">Continuar con el pago</ion-button>
     </form>
   </div>
 </ion-content>
-
-
-

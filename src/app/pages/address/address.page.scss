@@ -13,3 +13,15 @@ ion-content {
     width: 100%;
     max-width: 400px;
   }
+
+  .error-message {
+    color: red;
+    font-size: small;
+    margin-left: 16px;
+  }
+  
+  .validation-error {
+    color: red;
+    font-size: 0.875rem; // Ajusta el tamaño del texto según sea necesario
+    margin-top: 0.5rem;
+  }

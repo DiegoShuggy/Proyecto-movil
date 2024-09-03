@@ -1,40 +1,61 @@
 <ion-header>
   <ion-toolbar>
     <ion-menu-button slot="start"></ion-menu-button>
-    <ion-title>Registro de Medio de Pago</ion-title>
+    <ion-title>Confirmación</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <div class="form-container">
-    <form>
+    <form (ngSubmit)="onSubmit()">
       <ion-item>
         <ion-label position="floating">Nombre del Titular</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="text" [(ngModel)]="cardholderName" name="cardholderName" required></ion-input>
       </ion-item>
+      <div *ngIf="!cardholderName && formSubmitted" class="validation-error">
+        El nombre del titular es requerido.
+      </div>
 
       <ion-item>
         <ion-label position="floating">Número de Tarjeta</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="text" [(ngModel)]="cardNumber" name="cardNumber" required></ion-input>
       </ion-item>
+      <div *ngIf="!cardNumber && formSubmitted" class="validation-error">
+        El número de tarjeta es requerido.
+      </div>
 
       <ion-item>
-        <ion-label position="floating">Fecha de Expiración</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-label position="floating">Mes de Expiración</ion-label>
+        <ion-input type="number" min="1" max="12" [(ngModel)]="expirationMonth" name="expirationMonth" required></ion-input>
       </ion-item>
+      <div *ngIf="expirationMonth === null && formSubmitted" class="validation-error">
+        El mes de expiración es requerido.
+      </div>
+      <div *ngIf="expirationMonth !== null && (expirationMonth < 1 || expirationMonth > 12) && formSubmitted" class="validation-error">
+        El mes de expiración debe estar entre 1 y 12.
+      </div>
+
+      <ion-item>
+        <ion-label position="floating">Año de Expiración</ion-label>
+        <ion-input type="number" min="2023" [(ngModel)]="expirationYear" name="expirationYear" required></ion-input>
+      </ion-item>
+      <div *ngIf="expirationYear === null && formSubmitted" class="validation-error">
+        El año de expiración es requerido.
+      </div>
+      <div *ngIf="expirationYear !== null && expirationYear < 2023 && formSubmitted" class="validation-error">
+        El año de expiración debe ser 2023 o posterior.
+      </div>
 
       <ion-item>
         <ion-label position="floating">CVV</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="number" [(ngModel)]="cvv" name="cvv"></ion-input>
       </ion-item>
 
-      <ion-button expand="full" type="submit" [routerLink]="['/pago']">Completar orden</ion-button>
+      <div *ngIf="!formIsValid && formSubmitted" class="validation-error">
+        Por favor, complete todos los campos correctamente.
+      </div>
+
+      <ion-button expand="full" type="submit">Completar orden</ion-button>
     </form>
   </div>
 </ion-content>
-
-
-
-
-
-
