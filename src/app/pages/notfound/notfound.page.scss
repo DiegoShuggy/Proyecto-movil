@@ -1,0 +1,102 @@
+/* Estilos para el contenido de la página */
+.not-found-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    background-color: #0d0d0d;
+    color: #ffffff;
+  }
+  
+  /* Contenedor de error con animación */
+  .error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative; /* Asegura que los elementos hijos se posicionen en relación a este contenedor */
+    padding-top: 3rem; /* Ajusta el espacio en la parte superior para centrar verticalmente el contenido */
+  }
+  
+  /* Estilos para el texto del error */
+  .glitch {
+    font-size: 8rem;
+    position: relative;
+    color: #ffffff;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    z-index: 1; /* Asegura que el texto "404" esté encima de otros elementos */
+    margin-bottom: 1rem; /* Añade espacio debajo del texto "404" */
+  }
+  
+  /* Efectos de glitch para el texto */
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0.8; /* Aumenta la opacidad para hacer el efecto más notorio */
+    color: #ff0000;
+    background: #0d0d0d;
+    overflow: hidden;
+    z-index: -1; /* Envía los efectos de glitch detrás del texto principal */
+  }
+  
+  .glitch::before {
+    left: 4px; /* Aumenta el desplazamiento para un efecto más notorio */
+    text-shadow: -4px 0 #00ffea; /* Aumenta el desplazamiento de la sombra para un efecto más dramático */
+    animation: glitch-skew 1.5s infinite linear;
+  }
+  
+  .glitch::after {
+    left: -4px; /* Aumenta el desplazamiento para un efecto más notorio */
+    text-shadow: -4px 0 #ff00e1; /* Aumenta el desplazamiento de la sombra para un efecto más dramático */
+    animation: glitch-skew 1.5s infinite linear reverse;
+  }
+  
+  /* Animación de glitch */
+  @keyframes glitch-skew {
+    0% { clip: rect(5px, 9999px, 10px, 0); transform: skew(0.5deg); }
+    5% { clip: rect(25px, 9999px, 85px, 0); transform: skew(1deg); }
+    10% { clip: rect(5px, 9999px, 45px, 0); transform: skew(0.5deg); }
+    15% { clip: rect(30px, 9999px, 70px, 0); transform: skew(1deg); }
+    20% { clip: rect(10px, 9999px, 65px, 0); transform: skew(0.5deg); }
+    25% { clip: rect(40px, 9999px, 90px, 0); transform: skew(1deg); }
+    30% { clip: rect(15px, 9999px, 50px, 0); transform: skew(0.5deg); }
+    35% { clip: rect(30px, 9999px, 75px, 0); transform: skew(1deg); }
+    40% { clip: rect(20px, 9999px, 70px, 0); transform: skew(0.5deg); }
+    45% { clip: rect(35px, 9999px, 80px, 0); transform: skew(1deg); }
+    50% { clip: rect(10px, 9999px, 55px, 0); transform: skew(0.5deg); }
+    55% { clip: rect(40px, 9999px, 85px, 0); transform: skew(1deg); }
+    60% { clip: rect(25px, 9999px, 60px, 0); transform: skew(0.5deg); }
+    65% { clip: rect(30px, 9999px, 75px, 0); transform: skew(1deg); }
+    70% { clip: rect(20px, 9999px, 65px, 0); transform: skew(0.5deg); }
+    75% { clip: rect(35px, 9999px, 80px, 0); transform: skew(1deg); }
+    80% { clip: rect(10px, 9999px, 50px, 0); transform: skew(0.5deg); }
+    85% { clip: rect(40px, 9999px, 90px, 0); transform: skew(1deg); }
+    90% { clip: rect(25px, 9999px, 70px, 0); transform: skew(0.5deg); }
+    95% { clip: rect(30px, 9999px, 75px, 0); transform: skew(1deg); }
+    100% { clip: rect(20px, 9999px, 65px, 0); transform: skew(0.5deg); }
+  }
+  
+  /* Estilos para los mensajes de error */
+  .error-message {
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    z-index: 1; /* Asegura que el mensaje de error esté encima del glitch */
+  }
+  
+  /* Añadir espacio extra para evitar superposición */
+  .error-description {
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    z-index: 1; /* Asegura que la descripción esté encima del glitch */
+  }
+  
+  /* Estilo para el botón de volver al inicio */
+  .back-button {
+    margin-top: 2rem;
+    z-index: 1; /* Asegura que el botón esté encima del glitch */
+  }
+  
