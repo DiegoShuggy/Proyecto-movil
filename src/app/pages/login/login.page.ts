@@ -54,4 +54,9 @@ export class LoginPage {
 
     await alert.present();
   }
+
+  // Método para navegar a la página de recuperación de contraseña
+  navigateToRecover() {
+    this.navCtrl.navigateForward('/recuperarc');
+  }
 }

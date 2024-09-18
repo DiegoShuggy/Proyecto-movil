@@ -150,10 +150,17 @@ const routes: Routes = [
     loadChildren: () => import('./pages/perfil/perfil.module').then( m => m.PerfilPageModule)
   },
 
+  {
+    path: 'recuperarc',
+    loadChildren: () => import('./pages/recuperarc/recuperarc.module').then( m => m.RecuperarcPageModule)
+  },
+
       {
     path: '**',
     loadChildren: () => import('./pages/notfound/notfound.module').then(m => m.NotfoundPageModule)
-  },
+  }
+
+
 
  
 

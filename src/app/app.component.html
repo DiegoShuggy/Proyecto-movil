@@ -10,18 +10,18 @@
       <ion-content>
         <ion-list>
           <ion-item [routerDirection]="'root'" [routerLink]="'/home'">
-            <ion-icon name="home-outline"></ion-icon>
+            <mat-icon>home</mat-icon>
             <ion-label>Inicio</ion-label>
           </ion-item>
           <ion-item [routerDirection]="'root'" [routerLink]="'/perfil'">
-            <ion-icon name="person-outline"></ion-icon>
+            <mat-icon>person</mat-icon>
             <ion-label>Perfil</ion-label>
           </ion-item>
         </ion-list>
   
         <!-- Botón de Logout -->
         <ion-item (click)="redirectToHome()" lines="full">
-          <ion-icon name="log-out-outline"></ion-icon>
+          <mat-icon>logout</mat-icon>
           <ion-label>Cerrar Sesión</ion-label>
         </ion-item>
       </ion-content>

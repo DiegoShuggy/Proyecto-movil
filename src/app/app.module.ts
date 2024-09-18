@@ -7,7 +7,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms'; // Importa ReactiveFormsModule
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Importa BrowserAnimationsModule
 import { MatIconModule } from '@angular/material/icon'; // Importa MatIconModule
 
 @NgModule({
@@ -17,9 +17,10 @@ import { MatIconModule } from '@angular/material/icon'; // Importa MatIconModule
     IonicModule.forRoot(),
     AppRoutingModule,
     ReactiveFormsModule, // Agrega ReactiveFormsModule aquí
-    MatIconModule // Agrega MatIconModule si no estaba incluido
+    BrowserAnimationsModule, // Agrega BrowserAnimationsModule para animaciones de Angular Material
+    MatIconModule // Agrega MatIconModule para íconos de Angular Material
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, provideAnimationsAsync()],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
