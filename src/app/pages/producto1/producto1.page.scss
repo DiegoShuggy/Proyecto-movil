@@ -1,32 +1,43 @@
-ion-content {
-    --background: #f0f0f0; /* color fondito */
-  }
-  
-
-  .block {
-    width: 10%;
-    height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  section {
-    display: table;
-  }
-  
-  .example-label {
-    display: table-cell;
-    color: #000000;
-    font-size: 30px;
-    min-width: 300px;
-    padding-top: 50px;
+/* Estilo para el fondo de la página */
+.page-background {
+  --background: #ecca25; /* color fondito */
 }
-.corazon{
+
+/* Estilo para el contenido del modal */
+.modal-content {
+  --background: #f0e097; /* Color de fondo del modal */
+}
+
+/* Estilo para las secciones */
+section {
+  display: table;
+}
+
+/* Estilo para las etiquetas de ejemplo */
+.example-label {
+  display: table-cell;
+  color: #000000;
+  font-size: 30px;
+  min-width: 300px;
+  padding-top: 50px;
+}
+
+/* Estilo para el botón con clase 'corazon' */
+.corazon {
   color: #fa0404;
+  --background: #f0e097;
+}
+
+/* Estilo para el botón de 'Más información' */
+#open-modal {
+  color: #000000; /* Color del texto */
+  --background: #f0e097; /* Color de fondo */
+}
+
+/* Estilo para el botón de 'Añadir al carro' */
+#open-toast {
+  color: #000000; /* Color del texto */
+  --background: #ffc107; /* Color de fondo */
 }
 
 
-
-
-
-  

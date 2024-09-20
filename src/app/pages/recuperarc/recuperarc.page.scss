@@ -1,0 +1,49 @@
+ion-content {
+    // Fondo de la página
+    --background: #ecca25;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .form-container {
+    // Box que encierra el formulario
+    background-color: #ffffff;
+    margin: auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    margin-top: 150px; // Ajusta este valor según tus necesidades
+    display: flex;
+    flex-direction: column;
+  }
+  
+  ion-header {
+    // Estilos para el header
+    ion-toolbar {
+      background-color: #3880ff;
+      color: #000000;
+    }
+  }
+  
+  ion-item.form-item {
+    // Estilos para los elementos del formulario
+    margin-bottom: 15px;
+  }
+  
+  .validation-error {
+    // Estilos para el mensaje de error
+    color: red;
+    margin-bottom: 15px;
+  }
+  
+  ion-button.submit-button {
+    // Estilos para el botón de submit
+    --background: #3880ff;
+    --background-hover: #3171e0;
+    --background-activated: #3171e0;
+  }
+  

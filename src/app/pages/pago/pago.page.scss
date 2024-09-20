@@ -1,5 +1,5 @@
 ion-content {
-    --background: #f0f0f0; /* fondo */
+    --background: #ecca25; /* fondo */
     
   }
   ion-card {
@@ -20,19 +20,19 @@ ion-content {
     ion-card-title {
       font-size: 2.5em; /* Tamaño de fuente para el título */
       font-weight: bold;
-      color: #fdfcfc; /* Color del texto del título */
+      color: #0a0a0a; /* Color del texto del título */
       margin: 0; /* Elimina el margen */
     }
   
     ion-card-subtitle {
       font-size: 1.7em; /* Tamaño de fuente para el subtítulo */
-      color: #f3efef; /* Color del texto del subtítulo */
+      color: #0f0f0f; /* Color del texto del subtítulo */
       margin: 0; /* Elimina el margen */
     }
   
     ion-card-content {
       font-size: 1.5em; /* Tamaño de fuente para el contenido */
-      color: #f7f5f5; /* Color del texto del contenido */
+      color: #0e0d0d; /* Color del texto del contenido */
       margin-top: 0px; /* Espacio encima del contenido */
     }
 
