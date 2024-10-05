@@ -154,11 +154,28 @@ const routes: Routes = [
     path: 'recuperarc',
     loadChildren: () => import('./pages/recuperarc/recuperarc.module').then( m => m.RecuperarcPageModule)
   },
+  {
+    path: 'editarperfil',
+    loadChildren: () => import('./pages/editarperfil/editarperfil.module').then( m => m.EditarperfilPageModule)
+  },
+  {
+    path: 'editarproducto',
+    loadChildren: () => import('./pages/editarproducto/editarproducto.module').then( m => m.EditarproductoPageModule)
+  },
+  {
+    path: 'editarcategoria',
+    loadChildren: () => import('./pages/editarcategoria/editarcategoria.module').then( m => m.EditarcategoriaPageModule)
+  },
 
       {
     path: '**',
     loadChildren: () => import('./pages/notfound/notfound.module').then(m => m.NotfoundPageModule)
-  }
+  },
+ 
+
+ 
+
+ 
 
 
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-perfil',
@@ -14,15 +14,7 @@ export class PerfilPage {
   contrasena: string = '1234';
   direccion: string = 'Avenida Falsa 23, 2051';
 
-  constructor(private alertController: AlertController) {}
+  
 
-  async editField(field: string) {
-    const alert = await this.alertController.create({
-      header: 'Edición exitosa',
-      message: `${field} editado correctamente.`,
-      buttons: ['OK']
-    });
-
-    await alert.present();
-  }
+ 
 }

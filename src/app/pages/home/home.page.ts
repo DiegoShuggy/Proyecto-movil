@@ -15,9 +15,9 @@ interface Category {
 })
 export class HomePage {
   categories: Category[] = [
-    { name: 'Accesorios', route: 'categoria1', image: 'assets/icon/accesorios.jpg' },
-    { name: 'Loza/Vajilla/Cerámica', route: 'categoria2', image: 'assets/icon/loza.jpg' },
-    { name: 'Manteles Mesa/Individuales', route: 'categoria3', image: 'assets/icon/manteles.jpg' },
+    { name: 'Accesorios', route: 'categoria1', image: 'assets/icon/categoria2.jfif' },
+    { name: 'Loza/Vajilla/Cerámica', route: 'categoria2', image: 'assets/icon/categoria2.jfif' },
+    { name: 'Manteles Mesa/Individuales', route: 'categoria3', image: 'assets/icon/categoria2.jfif' },
   ];
 
   constructor(private navCtrl: NavController) {}
