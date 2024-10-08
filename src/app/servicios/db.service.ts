@@ -1,7 +1,7 @@
 // Ruta: src/app/servicios/db.service.ts
 
 import { Injectable } from '@angular/core';
-import { SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
+import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
 import { BehaviorSubject } from 'rxjs';
 import { Usuario } from '../models/usuario';
 import { Producto } from '../models/producto';
@@ -16,11 +16,11 @@ import { EstadoEnvio } from '../models/estado-envio';
   providedIn: 'root',
 })
 export class DbService {
-  db: SQLiteObject;
+  db!: SQLiteObject;
   private isDbReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  constructor() {
-    // Constructor vacío o lógica para manejar el estado inicial de la base de datos
+  constructor(private sqlite: SQLite) {
+    this.initializeDatabase();
   }
 
   // Verifica si la base de datos está lista
@@ -28,26 +28,67 @@ export class DbService {
     return this.isDbReady.asObservable();
   }
 
-  // Inicializa la base de datos y crea las tablas necesarias
-  async createDatabase(db: SQLiteObject) {
-    this.db = db;
 
-    await this.db
-      .executeSql(
-        `
-          CREATE TABLE IF NOT EXISTS Usuario (
-            id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
-            Nombre VARCHAR(255),
-            Password VARCHAR(255),
-            Correo VARCHAR(255),
-            Direccion VARCHAR(255),
-            id_tipo_usuario INTEGER
-          );
-        `,
-        []
-      )
-      .then(() => console.log('Tabla Usuario creada'))
-      .catch((e) => console.error('Error creando tabla Usuario', e));
+  
+
+  // Inicializa la base de datos y crea las tablas necesarias
+  private async initializeDatabase() {
+    try {
+      const db = await this.sqlite.create({
+        name: 'data.db',
+        location: 'default'
+      });
+      this.db = db;
+      await this.createTables();
+      this.isDbReady.next(true);
+    } catch (e) {
+      console.error('Error initializing database', e);
+    }
+  }
+  async login(email: string, password: string): Promise<Usuario | null> {
+    try {
+      const res = await this.db.executeSql('SELECT * FROM Usuario WHERE Correo = ? AND Password = ?', [email, password]);
+      if (res.rows.length > 0) {
+        return res.rows.item(0);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      console.error('Error al iniciar sesión', e);
+      return null;
+    }
+  }
+  
+
+  // Ruta: src/app/servicios/db.service.ts
+
+getUsuarios(): Promise<Usuario[]> {
+  return this.db.executeSql('SELECT * FROM Usuario', []).then((res) => {
+    let usuarios: Usuario[] = [];
+    for (let i = 0; i < res.rows.length; i++) {
+      usuarios.push(res.rows.item(i));
+    }
+    return usuarios;
+  });
+}
+
+
+  // Inicializa la base de datos y crea las tablas necesarias
+  private async createTables() {
+    await this.db.executeSql(
+      `
+        CREATE TABLE IF NOT EXISTS Usuario (
+          id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
+          Nombre VARCHAR(255),
+          Password VARCHAR(255),
+          Correo VARCHAR(255),
+          Direccion VARCHAR(255),
+          id_tipo_usuario INTEGER
+        );
+      `,
+      []
+    ).then(() => console.log('Tabla Usuario creada'))
+    .catch(e => console.error('Error creando tabla Usuario', e));
 
     await this.db
       .executeSql(
@@ -161,19 +202,20 @@ export class DbService {
   // ===============================
 
   // Métodos para 'Usuario'
-  addUsuario(usuario: Usuario) {
-    const query = `
-      INSERT INTO Usuario (Nombre, Password, Correo, Direccion, id_tipo_usuario)
-      VALUES (?, ?, ?, ?, ?)
-    `;
-    return this.db.executeSql(query, [
-      usuario.Nombre,
-      usuario.Password,
-      usuario.Correo,
-      usuario.Direccion,
-      usuario.id_tipo_usuario,
-    ]);
+  async addUsuario(usuario: Usuario) {
+    if (!this.db) {
+      console.error('Database is not initialized');
+      return;
+    }
+    try {
+      await this.db.executeSql('INSERT INTO Usuario (Nombre, Password, Correo, Direccion, id_tipo_usuario) VALUES (?, ?, ?, ?, ?)', 
+      [usuario.Nombre, usuario.Password, usuario.Correo, usuario.Direccion, usuario.id_tipo_usuario]);
+      console.log('Usuario añadido');
+    } catch (e) {
+      console.error('Error adding usuario', e);
+    }
   }
+  
 
   // Métodos para 'Producto'
   addProducto(producto: Producto) {
@@ -259,5 +301,7 @@ export class DbService {
     `;
     return this.db.executeSql(query, [estadoEnvio.desc_estado]);
   }
+
 }
+
 

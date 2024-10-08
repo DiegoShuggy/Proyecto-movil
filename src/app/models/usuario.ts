@@ -1,7 +1,7 @@
 // Ruta: src/app/modelos/usuario.ts
 
 export class Usuario {
-  id_usuario: number;
+  id_usuario?: number;
   Nombre: string;
   Password: string;
   Correo: string;
@@ -9,7 +9,7 @@ export class Usuario {
   id_tipo_usuario: number;
 
   constructor(
-    id_usuario: number,
+    id_usuario: number | undefined,
     Nombre: string,
     Password: string,
     Correo: string,

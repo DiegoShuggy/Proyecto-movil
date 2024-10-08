@@ -1,3 +1,4 @@
+<!-- src/app/pages/registro/registro.page.html-->
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
@@ -67,7 +68,7 @@
       </ion-text>
 
       <!-- Botón de Envío -->
-      <ion-button expand="full" type="submit" class="submit-button">Registrarse</ion-button>
+      <ion-button expand="full" type="submit" (click)="onSubmit()" class="submit-button">Registrarse</ion-button>
     </form>
   </div>
 </ion-content>

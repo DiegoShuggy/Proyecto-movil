@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AlertController, NavController, MenuController } from '@ionic/angular';
+import { DbService } from '../../servicios/db.service';  // Importa el servicio de la base de datos
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,8 @@ export class LoginPage {
   constructor(
     private alertController: AlertController,
     private navCtrl: NavController,
-    private menuCtrl: MenuController  // Inyección de MenuController
+    private menuCtrl: MenuController,  // Inyección de MenuController
+    private dbService: DbService  // Inyección del servicio de base de datos
   ) {}
 
   // Deshabilitar el menú cuando se entra a la página
@@ -28,14 +30,19 @@ export class LoginPage {
   }
 
   onSubmit() {
-    // Validar las credenciales
-    if (this.email === 'pepe@gmail.com' && this.password === '1234') {
-      this.presentAlert('Inicio de sesión exitoso', 'Has iniciado sesión correctamente.', '/home');
-    } else if (this.email === 'admin@gmail.com' && this.password === 'admin') {
-      this.presentAlert('Inicio de sesión exitoso', 'Has iniciado sesión como administrador.', '/home-admin');
-    } else {
-      this.errorMessage = 'Correo o contraseña incorrectos';
-    }
+    this.errorMessage = '';
+
+    // Validar las credenciales usando el servicio de base de datos
+    this.dbService.login(this.email, this.password).then((usuario) => {
+      if (usuario) {
+        this.presentAlert('Inicio de sesión exitoso', 'Has iniciado sesión correctamente.', '/home');
+      } else {
+        this.errorMessage = 'Correo o contraseña incorrectos';
+      }
+    }).catch((err) => {
+      console.error('Error al iniciar sesión', err);
+      this.errorMessage = 'Error al iniciar sesión. Por favor, inténtalo de nuevo.';
+    });
   }
 
   async presentAlert(header: string, message: string, redirectUrl: string) {
