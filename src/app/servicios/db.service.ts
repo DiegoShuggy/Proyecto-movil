@@ -11,6 +11,7 @@ import { TipoProducto } from '../models/tipo-producto';
 import { DetallePedido } from '../models/detalle-pedido';
 import { Envio } from '../models/envio';
 import { EstadoEnvio } from '../models/estado-envio';
+import { Categoria } from '../models/categoria';
 
 @Injectable({
   providedIn: 'root',
@@ -45,6 +46,8 @@ export class DbService {
       console.error('Error initializing database', e);
     }
   }
+
+  // persistencia de datos con el login para el registro 
   async login(email: string, password: string): Promise<Usuario | null> {
     try {
       const res = await this.db.executeSql('SELECT * FROM Usuario WHERE Correo = ? AND Password = ?', [email, password]);
@@ -58,9 +61,72 @@ export class DbService {
       return null;
     }
   }
+  // carrito eb general
+  async addToCart(id_producto: number, cantidad: number) {
+    try {
+      await this.db.executeSql('INSERT INTO Carrito (id_producto, cantidad) VALUES (?, ?)', [id_producto, cantidad]);
+      console.log('Producto añadido al carrito');
+    } catch (e) {
+      console.error('Error añadiendo producto al carrito', e);
+    }
+  }
+
+  async getCartItems(): Promise<any[]> {
+    if (!this.db) {
+      console.error('Database is not initialized');
+      return [];
+    }
+    try {
+      const res = await this.db.executeSql('SELECT * FROM Carrito', []);
+      let items: any[] = [];
+      for (let i = 0; i < res.rows.length; i++) {
+        items.push(res.rows.item(i));
+      }
+      return items;
+    } catch (e) {
+      console.error('Error obteniendo productos del carrito', e);
+      return [];
+    }
+  }
+
+  //categorias para productos
+
+  async addCategoria(categoria: Categoria) {
+    const data = [categoria.nombre, categoria.imagen];
+    await this.db.executeSql('INSERT INTO Categorias (nombre, imagen) VALUES (?, ?)', data)
+      .then(() => console.log('Categoría añadida'))
+      .catch(e => console.error('Error añadiendo categoría', e));
+  }
+  
+  async getCategorias(): Promise<Categoria[]> {
+    const res = await this.db.executeSql('SELECT * FROM Categorias', []);
+    let categorias: Categoria[] = [];
+    for (let i = 0; i < res.rows.length; i++) {
+      categorias.push(res.rows.item(i));
+    }
+    return categorias;
+  }
+  
+  async updateCategoria(categoria: Categoria) {
+    const data = [categoria.nombre, categoria.imagen, categoria.id_categoria];
+    await this.db.executeSql('UPDATE Categorias SET nombre = ?, imagen = ? WHERE id_categoria = ?', data)
+      .then(() => console.log('Categoría actualizada'))
+      .catch(e => console.error('Error actualizando categoría', e));
+  }
+
+  async deleteCategoria(id_categoria: number) {
+    await this.db.executeSql('DELETE FROM Categorias WHERE id_categoria = ?', [id_categoria])
+      .then(() => console.log('Categoría eliminada'))
+      .catch(e => console.error('Error eliminando categoría', e));
+  }
+  
+  
+  
+  
+  
   
 
-  // Ruta: src/app/servicios/db.service.ts
+ 
 
 getUsuarios(): Promise<Usuario[]> {
   return this.db.executeSql('SELECT * FROM Usuario', []).then((res) => {
@@ -74,7 +140,37 @@ getUsuarios(): Promise<Usuario[]> {
 
 
   // Inicializa la base de datos y crea las tablas necesarias
+
+
+  
   private async createTables() {
+
+    // categorias
+    await this.db.executeSql(
+      `
+        CREATE TABLE IF NOT EXISTS Categorias (
+          id_categoria INTEGER PRIMARY KEY AUTOINCREMENT,
+          nombre VARCHAR(255),
+          imagen VARCHAR(255)
+        );
+      `,
+      []
+    ).then(() => console.log('Tabla Categorias creada'))
+      .catch(e => console.error('Error creando tabla Categorias', e));
+      // carrito
+      await this.db.executeSql(
+        `
+          CREATE TABLE IF NOT EXISTS Carrito (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id_producto INTEGER,
+            cantidad INTEGER
+          );
+        `,
+        []
+      ).then(() => console.log('Tabla Carrito creada'))
+        .catch(e => console.error('Error creando tabla Carrito', e));
+    
+        //usuario 
     await this.db.executeSql(
       `
         CREATE TABLE IF NOT EXISTS Usuario (
@@ -89,7 +185,7 @@ getUsuarios(): Promise<Usuario[]> {
       []
     ).then(() => console.log('Tabla Usuario creada'))
     .catch(e => console.error('Error creando tabla Usuario', e));
-
+    // producto
     await this.db
       .executeSql(
         `
@@ -106,6 +202,9 @@ getUsuarios(): Promise<Usuario[]> {
       )
       .then(() => console.log('Tabla Producto creada'))
       .catch((e) => console.error('Error creando tabla Producto', e));
+
+
+        //pedido
 
     await this.db
       .executeSql(
@@ -124,7 +223,7 @@ getUsuarios(): Promise<Usuario[]> {
       )
       .then(() => console.log('Tabla Pedido creada'))
       .catch((e) => console.error('Error creando tabla Pedido', e));
-
+      //tipo usuario
     await this.db
       .executeSql(
         `
@@ -137,7 +236,7 @@ getUsuarios(): Promise<Usuario[]> {
       )
       .then(() => console.log('Tabla TipoUsuario creada'))
       .catch((e) => console.error('Error creando tabla TipoUsuario', e));
-
+        //tipo producto
     await this.db
       .executeSql(
         `
@@ -150,7 +249,7 @@ getUsuarios(): Promise<Usuario[]> {
       )
       .then(() => console.log('Tabla TipoProducto creada'))
       .catch((e) => console.error('Error creando tabla TipoProducto', e));
-
+        //detalle pedido
     await this.db
       .executeSql(
         `
@@ -165,6 +264,8 @@ getUsuarios(): Promise<Usuario[]> {
       )
       .then(() => console.log('Tabla DetallePedido creada'))
       .catch((e) => console.error('Error creando tabla DetallePedido', e));
+
+      //envio
 
     await this.db
       .executeSql(
@@ -181,6 +282,8 @@ getUsuarios(): Promise<Usuario[]> {
       )
       .then(() => console.log('Tabla Envio creada'))
       .catch((e) => console.error('Error creando tabla Envio', e));
+
+      //estado envio
 
     await this.db
       .executeSql(

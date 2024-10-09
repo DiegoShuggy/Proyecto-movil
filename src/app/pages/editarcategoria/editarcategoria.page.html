@@ -3,24 +3,39 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>Editar producto</ion-title>
+    <ion-title>Gestión de Categorías</ion-title>
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content class="ion-padding">
-
-  <!-- Campo Nombre de la Categoría -->
-  <ion-item>
-    <ion-label position="floating">Nombre de la Categoría</ion-label>
-    <ion-input type="text"></ion-input>
-  </ion-item>
-
-  
-
-  <!-- Botón de Guardar Cambios -->
-  <ion-button expand="full" class="ion-margin-top">
-    Guardar Cambios
+  <ion-button expand="block" (click)="addCategoria()">
+    Añadir Categoría
   </ion-button>
 
+  <ion-list>
+    <ion-item *ngFor="let categoria of categorias">
+      <ion-label>
+        <ion-input [(ngModel)]="categoria.nombre"></ion-input>
+      </ion-label>
+      <ion-button (click)="updateCategoria(categoria)">
+        Guardar
+      </ion-button>
+    </ion-item>
+    <ion-item *ngFor="let categoria of categorias">
+      <ion-thumbnail slot="start">
+        <img [src]="categoria.imagen">
+      </ion-thumbnail>
+      <ion-label>
+        <ion-input [(ngModel)]="categoria.nombre"></ion-input>
+      </ion-label>
+      <ion-button (click)="updateCategoria(categoria)">
+        Guardar
+      </ion-button>
+      <ion-button color="danger" (click)="deleteCategoria(categoria)">
+        Eliminar
+      </ion-button>
+    </ion-item>
+  </ion-list>
 </ion-content>
+<ion-list>
+

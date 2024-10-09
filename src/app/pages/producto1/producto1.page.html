@@ -15,17 +15,17 @@
   <img src="/assets/icon/producto1.png" alt="Imagen del Producto">
   <ion-button id="open-modal" expand="block">Más información</ion-button>
   
-  <ion-modal #modal trigger="open-modal" [initialBreakpoint]="0.50" [breakpoints]="[0, 0.25, 0.5, 0.5]">
+  <ion-modal #modal trigger="open-modal" [initialBreakpoint]="0.50" [breakpoints]="[0, 0.25, 0.5, 0.75]">
     <ng-template>
       <ion-content class="modal-content">
         <section>
-          <label class="example-label">
+          <div class="example-label">
             <img src="/assets/icon/estrellas.webp" alt="Imagen del Producto" width="150" height="50">
             <h3>Collar de pompones</h3>
             <h4>$9.999</h4>
             <h5>Detalles</h5>
             <h6>Bisutería artesanal, Collar de colores vivos con piedras de plástico</h6>
-            <ion-button id="open-toast" expand="block" (click)="agregarAlCarrito()">
+            <ion-button id="open-toast" expand="block" (click)="addToCart()">
               <ion-icon slot="start" name="cart"></ion-icon>
               Añadir al carro
             </ion-button>
@@ -34,7 +34,7 @@
               <ion-icon slot="start" name="cash"></ion-icon>
               Comprar ya
             </ion-button>
-          </label>
+          </div>
         </section>
       </ion-content>
     </ng-template>
