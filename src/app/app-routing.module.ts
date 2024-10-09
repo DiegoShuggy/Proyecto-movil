@@ -169,10 +169,17 @@ const routes: Routes = [
     loadChildren: () => import('./pages/editarcategoria/editarcategoria.module').then( m => m.EditarcategoriaPageModule)
   },
 
-      {
+  {
+    path: 'favoritos',
+    loadChildren: () => import('./pages/favoritos/favoritos.module').then( m => m.FavoritosPageModule)
+  },
+
+  {
     path: '**',
     loadChildren: () => import('./pages/notfound/notfound.module').then(m => m.NotfoundPageModule)
   },
+
+
  
 
  

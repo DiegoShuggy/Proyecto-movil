@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DbService } from '../../servicios/db.service';
-
+import { FavoritosService } from '../../servicios/favoritos.service';
 
 @Component({
   selector: 'app-producto1',
@@ -8,11 +8,18 @@ import { DbService } from '../../servicios/db.service';
   styleUrls: ['./producto1.page.scss'],
 })
 export class Producto1Page implements OnInit {
+  producto = {
+    nombre: 'Collar de pompones',
+    precio: 9999,
+    imagen: '/assets/icon/producto1.png'
+  };
 
-  constructor(private dbService: DbService) { }
+  constructor(
+    private dbService: DbService,
+    private favoritosService: FavoritosService
+  ) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   async addToCart() {
     const id_producto = 1; // ID del producto que deseas añadir
@@ -20,4 +27,7 @@ export class Producto1Page implements OnInit {
     await this.dbService.addToCart(id_producto, cantidad);
   }
 
+  agregarAFavoritos() {
+    this.favoritosService.agregarFavorito(this.producto);
+  }
 }
