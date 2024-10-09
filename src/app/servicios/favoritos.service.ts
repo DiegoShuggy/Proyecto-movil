@@ -4,19 +4,18 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class FavoritosService {
-  private favoritos: any[] = [];
+  private productosFavoritos: any[] = [];
 
-  constructor() { }
+  constructor() {}
 
-  agregarFavorito(producto: any) {
-    this.favoritos.push(producto);
+  agregarAFavoritos(producto: any) {
+    if (!this.productosFavoritos.find(p => p.nombre === producto.nombre)) {
+      this.productosFavoritos.push(producto);
+      console.log('Producto agregado a favoritos:', producto); // Para verificar
+    }
   }
 
   obtenerFavoritos() {
-    return this.favoritos;
-  }
-
-  eliminarFavorito(index: number) {
-    this.favoritos.splice(index, 1);
+    return this.productosFavoritos;
   }
 }

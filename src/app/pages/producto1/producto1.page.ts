@@ -11,6 +11,7 @@ export class Producto1Page implements OnInit {
   producto = {
     nombre: 'Collar de pompones',
     precio: 9999,
+    descripcion: 'Bisutería artesanal, Collar de colores vivos con piedras de plástico',
     imagen: '/assets/icon/producto1.png'
   };
 
@@ -28,6 +29,6 @@ export class Producto1Page implements OnInit {
   }
 
   agregarAFavoritos() {
-    this.favoritosService.agregarFavorito(this.producto);
+    this.favoritosService.agregarAFavoritos(this.producto);
   }
 }
