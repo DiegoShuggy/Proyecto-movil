@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DbService } from '../../servicios/db.service';
 
 
 @Component({
@@ -8,9 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class Producto1Page implements OnInit {
 
-  constructor() { }
+  constructor(private dbService: DbService) { }
 
   ngOnInit() {
+  }
+
+  async addToCart() {
+    const id_producto = 1; // ID del producto que deseas añadir
+    const cantidad = 1; // Cantidad del producto
+    await this.dbService.addToCart(id_producto, cantidad);
   }
 
 }

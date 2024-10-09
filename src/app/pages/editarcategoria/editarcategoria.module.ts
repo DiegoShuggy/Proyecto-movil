@@ -1,12 +1,10 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
 
 import { EditarcategoriaPageRoutingModule } from './editarcategoria-routing.module';
-
-import { EditarcategoriaPage } from './editarcategoria.page';
+import { EditarCategoriaPage } from './editarcategoria.page'; // Asegúrate de que el nombre está correctamente capitalizado
 
 @NgModule({
   imports: [
@@ -15,6 +13,7 @@ import { EditarcategoriaPage } from './editarcategoria.page';
     IonicModule,
     EditarcategoriaPageRoutingModule
   ],
-  declarations: [EditarcategoriaPage]
+  declarations: [EditarCategoriaPage], // Asegúrate de que el nombre está correctamente capitalizado
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class EditarcategoriaPageModule {}

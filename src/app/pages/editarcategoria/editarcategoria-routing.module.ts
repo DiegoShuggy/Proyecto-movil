@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-
-import { EditarcategoriaPage } from './editarcategoria.page';
+import { RouterModule, Routes } from '@angular/router';
+import { EditarCategoriaPage } from './editarcategoria.page'; // Asegúrate de que el nombre está correctamente capitalizado
 
 const routes: Routes = [
   {
     path: '',
-    component: EditarcategoriaPage
+    component: EditarCategoriaPage // Asegúrate de que el nombre está correctamente capitalizado
   }
 ];
 

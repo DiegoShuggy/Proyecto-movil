@@ -1,29 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
-
-
-interface Category {
-  name: string;
-  route: string;
-  image: string;
-}
+import { DbService } from '../../servicios/db.service';
+import { Categoria } from '../../models/categoria';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage {
-  categories: Category[] = [
-    { name: 'Accesorios', route: 'categoria1', image: 'assets/icon/categoria2.jfif' },
-    { name: 'Loza/Vajilla/Cerámica', route: 'categoria2', image: 'assets/icon/categoria2.jfif' },
-    { name: 'Manteles Mesa/Individuales', route: 'categoria3', image: 'assets/icon/categoria2.jfif' },
-  ];
+export class HomePage implements OnInit {
+  categories: Categoria[] = [];
 
-  constructor(private navCtrl: NavController) {}
+  constructor(private navCtrl: NavController, private dbService: DbService) {}
 
-  viewCategory(category: Category) {
-    // Redireccionar a la ruta específica para la categoría seleccionada
-    this.navCtrl.navigateForward(`/products/${category.route}`);
+  ngOnInit() {
+    this.loadCategories();
+  }
+
+  async loadCategories() {
+    this.categories = await this.dbService.getCategorias();
+  }
+
+  viewCategory(category: Categoria) {
+    this.navCtrl.navigateForward(`/categoria${category.id_categoria}`);
   }
 }
