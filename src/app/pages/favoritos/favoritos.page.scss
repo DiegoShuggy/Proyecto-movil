@@ -1,18 +1,15 @@
-.no-favorites {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    color: #888;
+ion-content {
+  --background: #ecca25 ; /* fondo */
+}
+
+ion-card {
+    margin: 10px;
+    cursor: pointer;
   }
   
-  ion-item {
-    --border-color: #ddd;
-    --border-width: 1px;
-    --inner-padding-end: 12px;
+  ion-img {
+    height: 200px;
+    object-fit: cover;
   }
   
-  ion-icon {
-    font-size: 20px;
-  }
   
