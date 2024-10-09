@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+//import { FavoritosService } from 'src/app/servicios/favoritos';
 
 
 @Component({
@@ -8,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class Producto1Page implements OnInit {
 
-  constructor() { }
+  producto = {
+    nombre: 'Collar de pompones',
+    precio: 9999,
+    imagen: '/assets/icon/producto1.png'
+  };
+
+  //constructor(private favoritosService: FavoritosService) { }
 
   ngOnInit() {
   }
 
+  agregarAFavoritos() {
+    //this.favoritosService.agregarFavorito(this.producto);
+  }
 }
