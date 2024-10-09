@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content class="ion-padding page-background">
-  <ion-button id="corazon" class="corazon" shape="">
+  <ion-button id="corazon" class="corazon" (click)="agregarAFavoritos()">
     <ion-icon slot="icon-only" name="heart"></ion-icon>
     <ion-toast trigger="corazon" message="El producto se guardó en favoritos" [duration]="5000"></ion-toast>
   </ion-button>
@@ -20,11 +20,11 @@
         <section>
           <label class="example-label">
             <img src="/assets/icon/estrellas.webp" alt="Imagen del Producto" width="150" height="50">
-            <h3>Collar pulsera artesanal</h3>
+            <h3>Pulsera artesanal</h3>  <!-- Nombre correcto del producto -->
             <h4>$7.999</h4>
             <h5>Detalles</h5>
-            <h6>Collar/Pulsera con piedras artesanales</h6>
-            <ion-button id="open-toast" expand="block">
+            <h6>Pulsera hecha a mano con materiales de calidad</h6>  <!-- Descripción correcta -->
+            <ion-button id="open-toast" expand="block" (click)="agregarAlCarrito()">
               <ion-icon slot="start" name="cart"></ion-icon>
               Añadir al carro
             </ion-button>

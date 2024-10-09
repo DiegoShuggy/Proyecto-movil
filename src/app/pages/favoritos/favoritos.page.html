@@ -1,27 +1,23 @@
 <ion-header>
   <ion-toolbar>
+    <ion-menu-button slot="start"></ion-menu-button>
     <ion-title>Favoritos</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="agregarFavorito()">
-        <ion-icon slot="icon-only" name="add"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-list *ngIf="favoritos.length > 0; else noFavoritos">
-    <ion-item *ngFor="let favorito of favoritos; let i = index">
-      {{ favorito }}
-      <ion-button fill="clear" slot="end" (click)="eliminarFavorito(i)">
-        <ion-icon name="trash" color="danger"></ion-icon>
-      </ion-button>
-    </ion-item>
-  </ion-list>
-
-  <ng-template #noFavoritos>
-    <div class="no-favorites">
-      <p>No hay objetos favoritos</p>
-    </div>
-  </ng-template>
+  <div *ngIf="productosFavoritos.length === 0">
+    <p>No tienes productos favoritos.</p>
+  </div>
+  <div *ngFor="let producto of productosFavoritos" class="product">
+    <ion-card class="small-card">
+      <ion-card-header>
+        <ion-card-title class="large-text">{{ producto.nombre }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-subtitle class="large-text">
+        Precio: ${{ producto.precio }}
+      </ion-card-subtitle>
+      <img [src]="producto.imagen" alt="Imagen del Producto">
+    </ion-card>
+  </div>
 </ion-content>
