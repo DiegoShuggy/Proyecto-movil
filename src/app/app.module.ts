@@ -6,7 +6,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { ReactiveFormsModule } from '@angular/forms'; // Importa ReactiveFormsModule
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // Importa FormsModule y ReactiveFormsModule
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Importa BrowserAnimationsModule
 import { MatIconModule } from '@angular/material/icon'; // Importa MatIconModule
 
@@ -16,6 +16,7 @@ import { MatIconModule } from '@angular/material/icon'; // Importa MatIconModule
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
+    FormsModule, // Agrega FormsModule aquí
     ReactiveFormsModule, // Agrega ReactiveFormsModule aquí
     BrowserAnimationsModule, // Agrega BrowserAnimationsModule para animaciones de Angular Material
     MatIconModule // Agrega MatIconModule para íconos de Angular Material

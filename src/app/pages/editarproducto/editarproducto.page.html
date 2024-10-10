@@ -3,33 +3,29 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>Editar producto</ion-title>
+    <ion-title>Gestión de Productos</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-
-  <!-- Campo Nombre del Producto -->
-  <ion-item>
-    <ion-label position="floating">Nombre del Producto</ion-label>
-    <ion-input type="text"></ion-input>
-  </ion-item>
-
-  <!-- Campo Precio -->
-  <ion-item>
-    <ion-label position="floating">Precio</ion-label>
-    <ion-input type="number" min="0" step="0.01"></ion-input>
-  </ion-item>
-
-  <!-- Campo Descripción del Producto -->
-  <ion-item>
-    <ion-label position="floating">Descripción</ion-label>
-    <ion-textarea></ion-textarea>
-  </ion-item>
-
-  <!-- Botón de Guardar Cambios -->
-  <ion-button expand="full" class="ion-margin-top">
-    Guardar Cambios
+  <ion-button expand="block" (click)="confirmAddProducto()">
+    Añadir Producto
   </ion-button>
 
+  <ion-list>
+    <ion-item *ngFor="let producto of productos">
+      <ion-label>
+        <ion-input [(ngModel)]="producto.Nombre" placeholder="Nombre del Producto"></ion-input>
+        <ion-input [(ngModel)]="producto.Precio" placeholder="Precio del Producto" type="number"></ion-input>
+        <ion-textarea [(ngModel)]="producto.Descripcion" placeholder="Descripción"></ion-textarea>
+        <ion-input [(ngModel)]="producto.Imagen" placeholder="URL de la Imagen"></ion-input>
+      </ion-label>
+      <ion-button (click)="confirmUpdateProducto(producto)">
+        Guardar
+      </ion-button>
+      <ion-button color="danger" (click)="confirmDeleteProducto(producto)">
+        Eliminar
+      </ion-button>
+    </ion-item>
+  </ion-list>
 </ion-content>

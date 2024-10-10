@@ -74,7 +74,8 @@ export class RegistroPage {
       Correo: this.form.value.email,
       Password: this.form.value.password,
       Direccion: '',  // Puedes agregar un campo para dirección si es necesario
-      id_tipo_usuario: 1  // Asignamos 1 como tipo de usuario (clientes) o 2 para usuario tipo administrador
+      id_tipo_usuario: 1,  // Asignamos 1 como tipo de usuario (clientes) o 2 para usuario tipo administrador
+      dirreciones_envio: ''  // Asigna un valor por defecto o el valor correspondiente
     };
 
     // Verificar si la base de datos está lista antes de agregar el usuario

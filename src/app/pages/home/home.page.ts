@@ -22,6 +22,6 @@ export class HomePage implements OnInit {
   }
 
   viewCategory(category: Categoria) {
-    this.navCtrl.navigateForward(`/categoria${category.id_categoria}`);
+    this.navCtrl.navigateForward(`/categoria/${category.id_categoria}`);
   }
 }

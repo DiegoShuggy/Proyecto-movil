@@ -162,7 +162,7 @@ const routes: Routes = [
   },
   {
     path: 'editarproducto',
-    loadChildren: () => import('./pages/editarproducto/editarproducto.module').then( m => m.EditarproductoPageModule)
+    loadChildren: () => import('./pages/editarproducto/editarproducto.module').then( m => m.EditarProductoPageModule)
   },
   {
     path: 'editarcategoria',
@@ -175,9 +175,14 @@ const routes: Routes = [
   },
 
   {
+    path: 'categoria/:id', loadChildren: () => import('./pages/categoria/categoria.module').then(m => m.CategoriaPageModule)
+  },
+
+  {
     path: '**',
     loadChildren: () => import('./pages/notfound/notfound.module').then(m => m.NotfoundPageModule)
   },
+
 
 
  

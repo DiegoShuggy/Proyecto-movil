@@ -1,20 +1,18 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
-
-import { EditarproductoPageRoutingModule } from './editarproducto-routing.module';
-
-import { EditarproductoPage } from './editarproducto.page';
+import { EditarProductoPageRoutingModule } from './editarproducto-routing.module';
+import { EditarProductoPage } from './editarproducto.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    EditarproductoPageRoutingModule
+    EditarProductoPageRoutingModule
   ],
-  declarations: [EditarproductoPage]
+  declarations: [EditarProductoPage],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class EditarproductoPageModule {}
+export class EditarProductoPageModule {}
