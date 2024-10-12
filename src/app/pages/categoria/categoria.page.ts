@@ -19,7 +19,7 @@ export class CategoriaPage implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.loadCategoria(id);
-      this.loadProductos(parseInt(id, 10));
+      this.loadProductos();
     }
   }
 
@@ -32,10 +32,9 @@ export class CategoriaPage implements OnInit {
     }
   }
 
-  async loadProductos(idCategoria: number) {
+  async loadProductos() {
     try {
-      const productos = await this.dbService.getProductos();
-      this.productos = productos.filter(prod => prod.id_tipo_producto === idCategoria);
+      this.productos = await this.dbService.getProductos();
     } catch (error) {
       console.error('Error loading products:', error);
     }

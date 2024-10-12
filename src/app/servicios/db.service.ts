@@ -28,6 +28,7 @@ export class DbService {
   dbState() {
     return this.isDbReady.asObservable();
   }
+  
 
 
   
@@ -123,8 +124,8 @@ export class DbService {
   // todo lo que tienee que ver con gestion de productos
 
   async addProducto(producto: Producto) {
-    const data = [producto.Nombre, producto.Descripcion, producto.Precio, producto.Imagen, producto.id_tipo_producto];
-    await this.db.executeSql('INSERT INTO Producto (nombre, descripcion, precio, imagen, id_tipo_producto) VALUES (?, ?, ?, ?, ?)', data)
+    const data = [producto.Nombre, producto.Descripcion, producto.Precio, producto.Imagen];
+    await this.db.executeSql('INSERT INTO Producto (nombre, descripcion, precio, imagen) VALUES (?, ?, ?, ?)', data)
       .then(() => console.log('Producto añadido'))
       .catch(e => console.error('Error añadiendo producto', e));
   }
@@ -139,8 +140,8 @@ export class DbService {
   }
 
   async updateProducto(producto: Producto) {
-    const data = [producto.Nombre, producto.Descripcion, producto.Precio, producto.Imagen, producto.id_tipo_producto, producto.id_producto];
-    await this.db.executeSql('UPDATE Producto SET nombre = ?, descripcion = ?, precio = ?, imagen = ?, id_tipo_producto = ? WHERE id_producto = ?', data)
+    const data = [producto.Nombre, producto.Descripcion, producto.Precio, producto.Imagen, producto.id_producto];
+    await this.db.executeSql('UPDATE Producto SET nombre = ?, descripcion = ?, precio = ?, imagen = ? WHERE id_producto = ?', data)
       .then(() => console.log('Producto actualizado'))
       .catch(e => console.error('Error actualizando producto', e));
   }

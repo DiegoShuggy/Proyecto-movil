@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { DbService } from '../../servicios/db.service';
 import { Producto } from '../../models/producto';
+import { Categoria } from '../../models/categoria';
 
 @Component({
   selector: 'app-editarproducto',
@@ -10,15 +11,21 @@ import { Producto } from '../../models/producto';
 })
 export class EditarProductoPage implements OnInit {
   productos: Producto[] = [];
+  categorias: Categoria[] = [];
 
   constructor(private dbService: DbService, private alertController: AlertController) {}
 
   ngOnInit() {
     this.loadProductos();
+    this.loadCategorias();
   }
 
   async loadProductos() {
     this.productos = await this.dbService.getProductos();
+  }
+
+  async loadCategorias() {
+    this.categorias = await this.dbService.getCategorias();
   }
 
   async confirmAddProducto() {
@@ -49,8 +56,8 @@ export class EditarProductoPage implements OnInit {
       Precio: 0,
       Descripcion: 'Descripción del Producto',
       Imagen: '/assets/icon/default.png', // Ruta de la imagen por defecto
-      id_tipo_producto: 1, // ID de tipo de producto por defecto
     };
+
     await this.dbService.addProducto(nuevoProducto);
     this.loadProductos();
   }
@@ -93,7 +100,7 @@ export class EditarProductoPage implements OnInit {
         {
           text: 'Eliminar',
           handler: () => {
-            this.deleteProducto(producto);
+            this.deleteProducto(producto.id_producto);
           },
         },
       ],
@@ -102,8 +109,8 @@ export class EditarProductoPage implements OnInit {
     await alert.present();
   }
 
-  async deleteProducto(producto: Producto) {
-    await this.dbService.deleteProducto(producto.id_producto);
+  async deleteProducto(id_producto: number) {
+    await this.dbService.deleteProducto(id_producto);
     this.loadProductos();
   }
 }
