@@ -69,7 +69,7 @@ export class DbService {
       return null;
     }
   }
-  // carrito eb general
+  // Método para agregar un producto al carrito
   async addToCart(id_producto: number, cantidad: number) {
     try {
       await this.db.executeSql('INSERT INTO Carrito (id_producto, cantidad) VALUES (?, ?)', [id_producto, cantidad]);
@@ -79,6 +79,7 @@ export class DbService {
     }
   }
 
+  // Método para obtener los productos del carrito
   async getCartItems(): Promise<any[]> {
     if (!this.db) {
       console.error('Database is not initialized');
@@ -96,8 +97,9 @@ export class DbService {
       return [];
     }
   }
-   // Método para eliminar un producto del carrito
-   async deleteFromCart(id_producto: number) {
+
+  // Método para eliminar un producto del carrito
+  async deleteFromCart(id_producto: number) {
     try {
       await this.db.executeSql('DELETE FROM Carrito WHERE id_producto = ?', [id_producto]);
       console.log('Producto eliminado del carrito');
@@ -105,6 +107,7 @@ export class DbService {
       console.error('Error eliminando producto del carrito', e);
     }
   }
+
 
   //categorias para productos
 

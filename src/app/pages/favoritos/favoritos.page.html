@@ -11,14 +11,16 @@
   </div>
   <div *ngFor="let producto of productosFavoritos" class="product">
     <ion-card class="small-card">
-      <ion-card-header>
-        <ion-card-title class="large-text">{{ producto.nombre }}</ion-card-title>
-      </ion-card-header>
-      <ion-card-subtitle class="large-text">
-        Precio: ${{ producto.precio }}
-      </ion-card-subtitle>
-      <img [src]="producto.imagen" alt="Imagen del Producto">
-      <ion-button color="danger" (click)="eliminarDeFavoritos(producto)">
+      <ion-item [routerLink]="['/productos', producto.id_producto]" detail>
+        <ion-card-header>
+          <ion-card-title class="large-text">{{ producto.nombre }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-subtitle class="large-text">
+          Precio: ${{ producto.precio }}
+        </ion-card-subtitle>
+        <img [src]="producto.imagen" alt="Imagen del Producto">
+      </ion-item>
+      <ion-button color="danger" (click)="confirmarEliminacion(producto)">
         <ion-icon slot="start" name="trash"></ion-icon>
         Eliminar
       </ion-button>
