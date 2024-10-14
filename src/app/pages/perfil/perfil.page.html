@@ -1,12 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-menu-button slot="start"></ion-menu-button>
     <ion-title>Perfil de Usuario</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-
+  
   <!-- Nombre -->
   <ion-item>
     <ion-label position="stacked">Nombre</ion-label>
@@ -31,11 +30,12 @@
     <ion-input [(ngModel)]="direccion" readonly></ion-input>
   </ion-item>
 
-  
-  <ion-button [routerLink]="['/editarperfil']" expand="full" class="ion-margin-top">
-    Editar
+  <!-- Botón para tomar foto -->
+  <ion-button expand="full" (click)="takePicture()">
+    Tomar Foto
   </ion-button>
 
-  
+  <!-- Mostrar la imagen capturada -->
+  <ion-img [src]="image" *ngIf="image"></ion-img>
 
 </ion-content>
