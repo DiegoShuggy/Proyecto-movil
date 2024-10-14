@@ -8,7 +8,8 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // Importa FormsModule y ReactiveFormsModule
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Importa BrowserAnimationsModule
-import { MatIconModule } from '@angular/material/icon'; // Importa MatIconModule
+import { MatIconModule } from '@angular/material/icon';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async'; // Importa MatIconModule
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,7 +22,7 @@ import { MatIconModule } from '@angular/material/icon'; // Importa MatIconModule
     BrowserAnimationsModule, // Agrega BrowserAnimationsModule para animaciones de Angular Material
     MatIconModule // Agrega MatIconModule para íconos de Angular Material
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, SQLite],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, SQLite, provideAnimationsAsync()],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

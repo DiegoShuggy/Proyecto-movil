@@ -16,6 +16,10 @@
           {{ item.descripcion }}
         </ion-card-subtitle>
         <img [src]="item.imagen" alt="Imagen del Producto">
+        <ion-button color="danger" (click)="eliminarDelCarrito(item)">
+          <ion-icon slot="start" name="trash"></ion-icon>
+          Eliminar
+        </ion-button>
       </ion-card>
     </div>
 

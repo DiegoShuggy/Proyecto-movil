@@ -18,6 +18,10 @@
         Precio: ${{ producto.precio }}
       </ion-card-subtitle>
       <img [src]="producto.imagen" alt="Imagen del Producto">
+      <ion-button color="danger" (click)="eliminarDeFavoritos(producto)">
+        <ion-icon slot="start" name="trash"></ion-icon>
+        Eliminar
+      </ion-button>
     </ion-card>
   </div>
 </ion-content>

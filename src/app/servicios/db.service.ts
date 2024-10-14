@@ -48,6 +48,13 @@ export class DbService {
     }
   }
 
+  // funciones de agregar a favoritos 
+
+ 
+
+
+
+
   // persistencia de datos con el login para el registro 
   async login(email: string, password: string): Promise<Usuario | null> {
     try {
@@ -87,6 +94,15 @@ export class DbService {
     } catch (e) {
       console.error('Error obteniendo productos del carrito', e);
       return [];
+    }
+  }
+   // Método para eliminar un producto del carrito
+   async deleteFromCart(id_producto: number) {
+    try {
+      await this.db.executeSql('DELETE FROM Carrito WHERE id_producto = ?', [id_producto]);
+      console.log('Producto eliminado del carrito');
+    } catch (e) {
+      console.error('Error eliminando producto del carrito', e);
     }
   }
 
@@ -152,6 +168,22 @@ export class DbService {
       .catch(e => console.error('Error eliminando producto', e));
   }
   
+  // para mostrar productos en pagina de productos
+
+  // Método para obtener un producto por su id
+  async getProductoById(id: number): Promise<Producto | null> {
+    try {
+      const res = await this.db.executeSql('SELECT * FROM Producto WHERE id_producto = ?', [id]);
+      if (res.rows.length > 0) {
+        return res.rows.item(0);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      console.error('Error obteniendo producto por id', e);
+      return null;
+    }
+  }
   
   
 

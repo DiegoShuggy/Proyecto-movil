@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DbService } from '../../servicios/db.service';
+import { CarritoService } from '../../servicios/carrito.service';
 
 @Component({
   selector: 'app-carrito',
@@ -10,24 +10,23 @@ export class CarritoPage implements OnInit {
   cartItems: any[] = [];
   totalCost: number = 0;
 
-  constructor(private dbService: DbService) {}
+  constructor(private carritoService: CarritoService) {}
 
   ngOnInit() {
-    this.dbService.dbState().subscribe(isReady => {
-      if (isReady) {
-        this.loadCartItems();
-      } else {
-        console.error('Database is not ready');
-      }
-    });
+    this.loadCartItems();
   }
 
-  async loadCartItems() {
-    this.cartItems = await this.dbService.getCartItems();
+  loadCartItems() {
+    this.cartItems = this.carritoService.obtenerProductos();
     this.calculateTotal();
   }
 
   calculateTotal() {
-    this.totalCost = this.cartItems.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
+    this.totalCost = this.carritoService.obtenerTotal();
+  }
+
+  eliminarDelCarrito(producto: any) {
+    this.carritoService.eliminarProducto(producto);
+    this.loadCartItems();
   }
 }

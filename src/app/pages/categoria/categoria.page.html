@@ -7,14 +7,17 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
   <ion-list>
     <ion-item *ngFor="let producto of productos">
-      <ion-label>
-        <h2>{{ producto.Nombre }}</h2>
-        <p>{{ producto.Descripcion }}</p>
-        <p>Precio: {{ producto.Precio | currency }}</p>
-      </ion-label>
+      <ion-card button [routerLink]="['/productos', producto.id_producto]">
+        <ion-card-header>
+          <ion-card-title>{{ producto.Nombre }}</ion-card-title>
+          <ion-card-subtitle>{{ producto.Descripcion }}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>Precio: {{ producto.Precio | currency }}</ion-card-content>
+        <img [src]="producto.Imagen" alt="Imagen del Producto">
+      </ion-card>
     </ion-item>
   </ion-list>
 </ion-content>

@@ -12,4 +12,9 @@ export class FavoritosPage {
   constructor(private favoritosService: FavoritosService) {
     this.productosFavoritos = this.favoritosService.obtenerFavoritos();
   }
+
+  eliminarDeFavoritos(producto: any) {
+    this.favoritosService.eliminarDeFavoritos(producto);
+    this.productosFavoritos = this.favoritosService.obtenerFavoritos();
+  }
 }

@@ -179,9 +179,16 @@ const routes: Routes = [
   },
 
   {
+    path: 'productos/:id',
+    loadChildren: () => import('./pages/productos/productos.module').then(m => m.ProductosPageModule)
+  },
+
+  {
     path: '**',
     loadChildren: () => import('./pages/notfound/notfound.module').then(m => m.NotfoundPageModule)
   },
+  
+
 
 
 
