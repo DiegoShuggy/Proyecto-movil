@@ -6,34 +6,34 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-
   <!-- Campo Nombre -->
   <ion-item>
     <ion-label position="floating">Nombre</ion-label>
-    <ion-input type="text"></ion-input>
+    <ion-input [(ngModel)]="usuario.Nombre" type="text"></ion-input>
   </ion-item>
-
   <!-- Campo Correo -->
   <ion-item>
     <ion-label position="floating">Correo Electrónico</ion-label>
-    <ion-input type="email"></ion-input>
+    <ion-input [(ngModel)]="usuario.Correo" type="email"></ion-input>
   </ion-item>
-
   <!-- Campo Contraseña -->
   <ion-item>
     <ion-label position="floating">Contraseña</ion-label>
-    <ion-input type="password"></ion-input>
+    <ion-input [(ngModel)]="usuario.Password" type="password"></ion-input>
   </ion-item>
-
   <!-- Campo Dirección (Casa) -->
   <ion-item>
     <ion-label position="floating">Dirección</ion-label>
-    <ion-input type="text"></ion-input>
+    <ion-input [(ngModel)]="usuario.Direccion" type="text"></ion-input>
   </ion-item>
-
+  <!-- Botón para tomar foto -->
+  <ion-button expand="full" (click)="takePicture()">
+    Tomar Foto
+  </ion-button>
+  <!-- Mostrar la imagen capturada -->
+  <ion-img [src]="usuario.avatar ? createObjectURL(usuario.avatar) : ''" *ngIf="usuario.avatar"></ion-img>
   <!-- Botón de Guardar Cambios -->
-  <ion-button [routerLink]="['/perfil']" expand="full" class="ion-margin-top">
+  <ion-button (click)="saveChanges()" expand="full" class="ion-margin-top">
     Guardar Cambios
   </ion-button>
-
 </ion-content>

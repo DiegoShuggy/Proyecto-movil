@@ -48,7 +48,7 @@ export class DbService {
     }
   }
 
-  // funciones de agregar a favoritos 
+ 
 
  
 
@@ -64,11 +64,12 @@ export class DbService {
       } else {
         return null;
       }
-    } catch (e) {
-      console.error('Error al iniciar sesión', e);
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
       return null;
     }
   }
+  
   // Método para agregar un producto al carrito
   async addToCart(id_producto: number, cantidad: number) {
     try {
@@ -188,19 +189,28 @@ export class DbService {
     }
   }
   
+  // Método para agregar un usuario
+  async addUsuario(usuario: Usuario) {
+    if (!this.db) {
+      console.error('Database is not initialized');
+      return;
+    }
+    try {
+      const data = [usuario.Nombre, usuario.Password, usuario.Correo, usuario.Direccion, usuario.id_tipo_usuario, usuario.dirreciones_envio, usuario.avatar];
+      await this.db.executeSql('INSERT INTO Usuario (Nombre, Password, Correo, Direccion, id_tipo_usuario, dirreciones_envio, avatar) VALUES (?, ?, ?, ?, ?, ?, ?)', data);
+      console.log('Usuario añadido');
+    } catch (e) {
+      console.error('Error adding usuario', e);
+    }
+  }
+
   
 
  
 
-getUsuarios(): Promise<Usuario[]> {
-  return this.db.executeSql('SELECT * FROM Usuario', []).then((res) => {
-    let usuarios: Usuario[] = [];
-    for (let i = 0; i < res.rows.length; i++) {
-      usuarios.push(res.rows.item(i));
-    }
-    return usuarios;
-  });
-}
+  
+  
+  
 
 
   // Inicializa la base de datos y crea las tablas necesarias
@@ -233,21 +243,22 @@ getUsuarios(): Promise<Usuario[]> {
         .catch(e => console.error('Error creando tabla Carrito', e));
     
         //usuario 
-    await this.db.executeSql(
-      `
-        CREATE TABLE IF NOT EXISTS Usuario (
-          id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
-          Nombre VARCHAR(255),
-          Password VARCHAR(255),
-          Correo VARCHAR(255),
-          Direccion VARCHAR(255),
-          id_tipo_usuario INTEGER,
-          dirreciones_envio VARCHAR(255)
-        );
-      `,
-      []
-    ).then(() => console.log('Tabla Usuario creada'))
-    .catch(e => console.error('Error creando tabla Usuario', e));
+        await this.db.executeSql(
+          `
+          CREATE TABLE IF NOT EXISTS Usuario (
+            id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
+            Nombre VARCHAR(255),
+            Password VARCHAR(255),
+            Correo VARCHAR(255),
+            Direccion VARCHAR(255),
+            id_tipo_usuario INTEGER,
+            dirreciones_envio VARCHAR(255),
+            avatar BLOB
+          );
+          `,
+          []
+        ).then(() => console.log('Tabla Usuario creada'))
+        .catch(e => console.error('Error creando tabla Usuario', e));
     // producto
     await this.db.executeSql(
       `CREATE TABLE IF NOT EXISTS Producto (
@@ -364,19 +375,7 @@ getUsuarios(): Promise<Usuario[]> {
   // ===============================
 
   // Métodos para 'Usuario'
-  async addUsuario(usuario: Usuario) {
-    if (!this.db) {
-      console.error('Database is not initialized');
-      return;
-    }
-    try {
-      await this.db.executeSql('INSERT INTO Usuario (Nombre, Password, Correo, Direccion, id_tipo_usuario) VALUES (?, ?, ?, ?, ?)', 
-      [usuario.Nombre, usuario.Password, usuario.Correo, usuario.Direccion, usuario.id_tipo_usuario]);
-      console.log('Usuario añadido');
-    } catch (e) {
-      console.error('Error adding usuario', e);
-    }
-  }
+ 
   
 
   
@@ -451,6 +450,42 @@ getUsuarios(): Promise<Usuario[]> {
     return this.db.executeSql(query, [estadoEnvio.desc_estado]);
   }
 
+// Método para actualizar un usuario
+
+
+async getUsuarios(): Promise<Usuario[]> {
+  const res = await this.db.executeSql('SELECT * FROM Usuario', []);
+  let usuarios: Usuario[] = [];
+  for (let i = 0; i < res.rows.length; i++) {
+    usuarios.push(res.rows.item(i));
+  }
+  return usuarios;
 }
 
-
+async updateUsuario(usuario: Usuario) {
+  if (!this.db) {
+    console.error('Database is not initialized');
+    return;
+  }
+  try {
+    const data = [
+      usuario.Nombre, 
+      usuario.Password, 
+      usuario.Correo, 
+      usuario.Direccion, 
+      usuario.id_tipo_usuario, 
+      usuario.dirreciones_envio, 
+      usuario.avatar, 
+      usuario.id_usuario
+    ];
+    await this.db.executeSql(`
+      UPDATE Usuario 
+      SET Nombre = ?, Password = ?, Correo = ?, Direccion = ?, id_tipo_usuario = ?, dirreciones_envio = ?, avatar = ? 
+      WHERE id_usuario = ?
+    `, data);
+    console.log('Usuario actualizado');
+  } catch (error) {
+    console.error('Error updating usuario:', error);
+  }
+}
+}

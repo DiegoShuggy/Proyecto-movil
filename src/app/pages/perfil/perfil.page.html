@@ -1,41 +1,35 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <ion-menu-button slot="start"></ion-menu-button>
     <ion-title>Perfil de Usuario</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  
   <!-- Nombre -->
   <ion-item>
     <ion-label position="stacked">Nombre</ion-label>
-    <ion-input [(ngModel)]="nombre" readonly></ion-input>
+    <ion-input [(ngModel)]="usuario.Nombre" readonly></ion-input>
   </ion-item>
-
   <!-- Correo -->
   <ion-item>
     <ion-label position="stacked">Correo</ion-label>
-    <ion-input [(ngModel)]="correo" readonly></ion-input>
+    <ion-input [(ngModel)]="usuario.Correo" readonly></ion-input>
   </ion-item>
-
   <!-- Contraseña -->
   <ion-item>
     <ion-label position="stacked">Contraseña</ion-label>
-    <ion-input [(ngModel)]="contrasena" type="password" readonly></ion-input>
+    <ion-input [(ngModel)]="usuario.Password" type="password" readonly></ion-input>
   </ion-item>
-
   <!-- Dirección -->
   <ion-item>
     <ion-label position="stacked">Dirección</ion-label>
-    <ion-input [(ngModel)]="direccion" readonly></ion-input>
+    <ion-input [(ngModel)]="usuario.Direccion" readonly></ion-input>
   </ion-item>
-
-  <!-- Botón para tomar foto -->
-  <ion-button expand="full" (click)="takePicture()">
-    Tomar Foto
-  </ion-button>
-
   <!-- Mostrar la imagen capturada -->
-  <ion-img [src]="image" *ngIf="image"></ion-img>
-
+  <ion-img [src]="usuario.avatar ? createObjectURL(usuario.avatar) : ''" *ngIf="usuario.avatar"></ion-img>
+  <!-- Botón para editar perfil -->
+  <ion-button expand="full" [routerLink]="['/editarperfil']">
+    Editar Perfil
+  </ion-button>
 </ion-content>
