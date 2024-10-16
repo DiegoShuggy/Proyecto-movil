@@ -1,32 +1,26 @@
-import { Component } from '@angular/core';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { Component, OnInit } from '@angular/core';
+import { Usuario } from '../../models/usuario';
+import { UsuarioService } from '../../servicios/usuario.service';
 
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.page.html',
   styleUrls: ['./perfil.page.scss'],
 })
-export class PerfilPage {
-  // Valores iniciales por defecto
-  nombre: string = 'Pepe';
-  correo: string = 'pepe@gmail.com';
-  contrasena: string = '1234';
-  direccion: string = 'Avenida Falsa 23, 2051';
+export class PerfilPage implements OnInit {
+  usuario: Usuario = {} as Usuario;
 
-  // Variable para almacenar la imagen capturada
-  image: string | undefined;
+  constructor(private usuarioService: UsuarioService) {}
 
-  constructor() {}
-
-  // Método para tomar una foto usando la cámara
-  async takePicture() {
-    const image = await Camera.getPhoto({
-      quality: 90,
-      allowEditing: false,
-      resultType: CameraResultType.Uri,
-      source: CameraSource.Camera, // Puedes usar CameraSource.Photos para acceder a la galería
+  ngOnInit() {
+    this.usuarioService.usuario$.subscribe(usuario => {
+      if (usuario) {
+        this.usuario = usuario;
+      }
     });
+  }
 
-    this.image = image.webPath; // Almacenar la ruta de la imagen capturada
+  createObjectURL(blob: Blob): string {
+    return URL.createObjectURL(blob);
   }
 }
