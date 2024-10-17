@@ -1,8 +1,9 @@
+// src/app/pages/registro/registro.page.ts
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { DbService } from '../../servicios/db.service';  // Importa el servicio de la base de datos
-import { Usuario } from '../../models/usuario';  // Importa el modelo de Usuario
-import { NavController } from '@ionic/angular';  // Para navegar después del registro
+import { Usuario } from '../../models/usuario';
+import { UsuarioService } from '../../servicios/usuario.service';
+import { NavController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-registro',
@@ -15,8 +16,9 @@ export class RegistroPage {
 
   constructor(
     private fb: FormBuilder,
-    private dbService: DbService,  // Inyecta el servicio de base de datos
-    private navCtrl: NavController  // Para la navegación después del registro
+    private usuarioService: UsuarioService,
+    private navCtrl: NavController,
+    private toastController: ToastController
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -30,7 +32,7 @@ export class RegistroPage {
         Validators.maxLength(32)
       ]],
       confirmPassword: ['', Validators.required]
-    }, { validator: this.passwordMatchValidator });
+    }, { validators: this.passwordMatchValidator });
   }
 
   // Validador para una letra mayúscula
@@ -59,7 +61,7 @@ export class RegistroPage {
   }
 
   // Método que se ejecuta al enviar el formulario
-  onSubmit() {
+  async onSubmit() {
     this.submitted = true;
 
     // Si el formulario es inválido, no hacemos nada
@@ -68,31 +70,34 @@ export class RegistroPage {
     }
 
     // Si el formulario es válido, creamos el objeto usuario y lo guardamos en la base de datos
-    const nuevoUsuario: Usuario = {
-      id_usuario: undefined,  // Dejar como null para que SQLite lo autoincremente
-      Nombre: this.form.value.name,
-      Correo: this.form.value.email,
-      Password: this.form.value.password,
-      Direccion: '',  // Puedes agregar un campo para dirección si es necesario
-      id_tipo_usuario: 1,  // Asignamos 1 como tipo de usuario (clientes) o 2 para usuario tipo administrador
-      dirreciones_envio: '',  // Asigna un valor por defecto o el valor correspondiente
-      avatar: new Blob() // Inicialmente vacío
-    };
+    const nuevoUsuario: Usuario = new Usuario(
+      this.form.value.name,
+      this.form.value.password,
+      this.form.value.email,
+      '',  // Dirección por defecto
+      1,   // Tipo de usuario por defecto (1: Cliente, 2: Administrador)
+      '',  // Direcciones de envío por defecto
+      new Blob() // Avatar inicialmente vacío
+    );
 
-    // Verificar si la base de datos está lista antes de agregar el usuario
-    this.dbService.dbState().subscribe(isReady => {
-      if (isReady) {
-        // Guardar el usuario en la base de datos a través del servicio
-        this.dbService.addUsuario(nuevoUsuario).then(() => {
-          console.log('Usuario registrado exitosamente');
-          // Redirigimos al usuario a la página de inicio de sesión u otra página
-          this.navCtrl.navigateForward('/login');
-        }).catch((err) => {
-          console.error('Error al registrar el usuario', err);
-        });
-      } else {
-        console.error('Database is not ready');
-      }
-    });
+    // Guardar el usuario a través del servicio de usuario
+    try {
+      await this.usuarioService.register(nuevoUsuario);
+      const toast = await this.toastController.create({
+        message: 'Usuario registrado exitosamente.',
+        duration: 2000,
+        color: 'success'
+      });
+      toast.present();
+      this.navCtrl.navigateForward('/login');
+    } catch (err) {
+      console.error('Error al registrar el usuario', err);
+      const toast = await this.toastController.create({
+        message: 'Error al registrar el usuario. Inténtalo de nuevo.',
+        duration: 2000,
+        color: 'danger'
+      });
+      toast.present();
+    }
   }
 }

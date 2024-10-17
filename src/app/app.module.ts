@@ -1,3 +1,4 @@
+// src/app/app.module.ts
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
@@ -9,7 +10,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // Importa FormsModule y ReactiveFormsModule
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Importa BrowserAnimationsModule
 import { MatIconModule } from '@angular/material/icon';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async'; // Importa MatIconModule
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,7 +22,10 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     BrowserAnimationsModule, // Agrega BrowserAnimationsModule para animaciones de Angular Material
     MatIconModule // Agrega MatIconModule para íconos de Angular Material
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, SQLite, provideAnimationsAsync()],
+  providers: [
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    SQLite
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

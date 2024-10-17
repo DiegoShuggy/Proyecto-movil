@@ -1,3 +1,4 @@
+<!-- src/app/pages/home/home.page.html -->
 <ion-header>
   <ion-toolbar>
     <ion-menu-button slot="start"></ion-menu-button>
@@ -6,6 +7,18 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <!-- Información del usuario (opcional) -->
+  <ion-card *ngIf="usuarioLogueado">
+    <ion-card-header>
+      <ion-card-title>Bienvenido, {{ usuarioLogueado.Nombre }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Correo: {{ usuarioLogueado.Correo }}</p>
+      <p>Dirección: {{ usuarioLogueado.Direccion }}</p>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Lista de Categorías -->
   <ion-grid>
     <ion-row>
       <ion-col size="12" size-md="6" size-lg="4" *ngFor="let category of categories">
@@ -18,11 +31,15 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <!-- Botones de Navegación para Pruebas -->
   <ion-button expand="block" [routerLink]="['/producto1']">
     Ir a Producto 1
   </ion-button>
   <ion-button expand="block" [routerLink]="['/editarcategoria']">
     Gestionar Categorías
   </ion-button>
-  <ion-button expand="block" [routerLink]="['/editarproducto']">Gestionar Productos</ion-button>
+  <ion-button expand="block" [routerLink]="['/editarproducto']">
+    Gestionar Productos
+  </ion-button>
 </ion-content>

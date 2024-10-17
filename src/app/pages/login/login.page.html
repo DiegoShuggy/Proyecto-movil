@@ -1,3 +1,4 @@
+<!-- src/app/pages/login/login.page.html -->
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
@@ -7,7 +8,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
   <div class="form-container">
     <form (ngSubmit)="onSubmit()">
       <ion-item class="form-item">
@@ -35,6 +36,11 @@
     <!-- Link to recover password page -->
     <div class="forgot-password">
       <a (click)="navigateToRecover()">¿Olvidaste tu contraseña?</a>
+    </div>
+
+    <!-- Link to registration page -->
+    <div class="register-link">
+      <a (click)="navigateToRegister()">¿No tienes una cuenta? Regístrate</a>
     </div>
   </div>
 </ion-content>

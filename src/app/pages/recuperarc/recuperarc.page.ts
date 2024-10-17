@@ -1,5 +1,6 @@
+// src/app/pages/recuperarc/recuperarc.page.ts
 import { Component } from '@angular/core';
-import { AlertController, NavController, MenuController } from '@ionic/angular';
+import { NavController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-recuperarc',
@@ -8,44 +9,34 @@ import { AlertController, NavController, MenuController } from '@ionic/angular';
 })
 export class RecuperarcPage {
   email: string = '';
-  errorMessage: string = '';
 
   constructor(
-    private alertController: AlertController,
     private navCtrl: NavController,
-    private menuCtrl: MenuController // Inyecta MenuController
+    private toastController: ToastController
   ) {}
 
-  ionViewWillEnter() {
-    this.menuCtrl.enable(false); // Desactiva el menú lateral
-  }
+  // Método para recuperar la contraseña
+  async recoverPassword() {
+    if (this.email) {
+      // Implementa la lógica de recuperación de contraseña aquí
+      // Por ejemplo, enviar un correo de recuperación a través de un servicio backend
+      // Aquí simplemente simularemos el proceso
 
-  ionViewWillLeave() {
-    this.menuCtrl.enable(true); // Activa el menú lateral nuevamente
-  }
-
-  onRecover() {
-    if (this.email === 'pepe@gmail.com') {
-      this.presentAlert('Recuperación de Contraseña', 'Se ha enviado un mensaje al correo', '/inicio');
+      // Simulación de éxito
+      const toast = await this.toastController.create({
+        message: 'Se ha enviado un correo de recuperación.',
+        duration: 2000,
+        color: 'success'
+      });
+      toast.present();
+      this.navCtrl.navigateBack('/pages/login');
     } else {
-      this.errorMessage = 'Correo no registrado';
+      const toast = await this.toastController.create({
+        message: 'Por favor, introduce tu correo electrónico.',
+        duration: 2000,
+        color: 'warning'
+      });
+      toast.present();
     }
-  }
-
-  async presentAlert(header: string, message: string, redirectUrl: string) {
-    const alert = await this.alertController.create({
-      header,
-      message,
-      buttons: [
-        {
-          text: 'Aceptar',
-          handler: () => {
-            this.navCtrl.navigateRoot(redirectUrl);  // Redirigir a la página de inicio
-          }
-        }
-      ]
-    });
-
-    await alert.present();
   }
 }

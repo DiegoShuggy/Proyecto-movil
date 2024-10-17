@@ -1,4 +1,5 @@
-<ion-header [translucent]="true">
+<!-- src/app/pages/perfil/perfil.page.html -->
+<ion-header>
   <ion-toolbar>
     <ion-menu-button slot="start"></ion-menu-button>
     <ion-title>Perfil de Usuario</ion-title>
@@ -6,30 +7,45 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <!-- Nombre -->
-  <ion-item>
-    <ion-label position="stacked">Nombre</ion-label>
-    <ion-input [(ngModel)]="usuario.Nombre" readonly></ion-input>
-  </ion-item>
-  <!-- Correo -->
-  <ion-item>
-    <ion-label position="stacked">Correo</ion-label>
-    <ion-input [(ngModel)]="usuario.Correo" readonly></ion-input>
-  </ion-item>
-  <!-- Contraseña -->
-  <ion-item>
-    <ion-label position="stacked">Contraseña</ion-label>
-    <ion-input [(ngModel)]="usuario.Password" type="password" readonly></ion-input>
-  </ion-item>
-  <!-- Dirección -->
-  <ion-item>
-    <ion-label position="stacked">Dirección</ion-label>
-    <ion-input [(ngModel)]="usuario.Direccion" readonly></ion-input>
-  </ion-item>
-  <!-- Mostrar la imagen capturada -->
-  <ion-img [src]="usuario.avatar ? createObjectURL(usuario.avatar) : ''" *ngIf="usuario.avatar"></ion-img>
-  <!-- Botón para editar perfil -->
-  <ion-button expand="full" [routerLink]="['/editarperfil']">
-    Editar Perfil
-  </ion-button>
+  <ng-container *ngIf="usuario">
+    <!-- Mostrar la imagen del avatar -->
+    <ion-item *ngIf="avatarURL">
+      <ion-label position="stacked">Avatar</ion-label>
+      <ion-img [src]="avatarURL"></ion-img>
+    </ion-item>
+
+    <!-- Nombre -->
+    <ion-item>
+      <ion-label position="stacked">Nombre</ion-label>
+      <ion-input [(ngModel)]="usuario.Nombre" readonly></ion-input>
+    </ion-item>
+
+    <!-- Correo Electrónico -->
+    <ion-item>
+      <ion-label position="stacked">Correo Electrónico</ion-label>
+      <ion-input [(ngModel)]="usuario.Correo" readonly></ion-input>
+    </ion-item>
+
+    <!-- Contraseña -->
+    <ion-item>
+      <ion-label position="stacked">Contraseña</ion-label>
+      <ion-input [(ngModel)]="usuario.Password" type="password" readonly></ion-input>
+    </ion-item>
+
+    <!-- Dirección -->
+    <ion-item>
+      <ion-label position="stacked">Dirección</ion-label>
+      <ion-input [(ngModel)]="usuario.Direccion" readonly></ion-input>
+    </ion-item>
+
+    <!-- Botón para editar perfil -->
+    <ion-button expand="full" routerLink="/editarperfil">
+      Editar Perfil
+    </ion-button>
+
+    <!-- Botón para cerrar sesión -->
+    <ion-button expand="full" color="danger" (click)="cerrarSesion()">
+      Cerrar Sesión
+    </ion-button>
+  </ng-container>
 </ion-content>

@@ -1,6 +1,7 @@
+// src/app/pages/login/login.page.ts
 import { Component } from '@angular/core';
-import { AlertController, NavController, MenuController } from '@ionic/angular';
-import { DbService } from '../../servicios/db.service';  // Importa el servicio de la base de datos
+import { NavController, AlertController, MenuController, ToastController } from '@ionic/angular';
+import { UsuarioService } from '../../servicios/usuario.service';
 
 @Component({
   selector: 'app-login',
@@ -13,57 +14,59 @@ export class LoginPage {
   errorMessage: string = '';
 
   constructor(
-    private alertController: AlertController,
     private navCtrl: NavController,
-    private menuCtrl: MenuController,  // Inyección de MenuController
-    private dbService: DbService  // Inyección del servicio de base de datos
+    private alertController: AlertController,
+    private menuCtrl: MenuController,
+    private usuarioService: UsuarioService,
+    private toastController: ToastController
   ) {}
 
   // Deshabilitar el menú cuando se entra a la página
   ionViewWillEnter() {
-    this.menuCtrl.enable(false);  // Desactiva el menú lateral
+    this.menuCtrl.enable(false);
   }
 
   // Rehabilitar el menú cuando se sale de la página
   ionViewWillLeave() {
-    this.menuCtrl.enable(true);  // Activa el menú lateral nuevamente
+    this.menuCtrl.enable(true);
   }
 
-  onSubmit() {
+  // Método que se ejecuta al enviar el formulario
+  async onSubmit() {
     this.errorMessage = '';
 
-    // Validar las credenciales usando el servicio de base de datos
-    this.dbService.login(this.email, this.password).then((usuario) => {
-      if (usuario) {
-        this.presentAlert('Inicio de sesión exitoso', 'Has iniciado sesión correctamente.', '/home');
-      } else {
-        this.errorMessage = 'Correo o contraseña incorrectos';
-      }
-    }).catch((err) => {
-      console.error('Error al iniciar sesión', err);
-      this.errorMessage = 'Error al iniciar sesión. Por favor, inténtalo de nuevo.';
-    });
-  }
+    if (!this.email || !this.password) {
+      this.errorMessage = 'Por favor, completa todos los campos.';
+      return;
+    }
 
-  async presentAlert(header: string, message: string, redirectUrl: string) {
-    const alert = await this.alertController.create({
-      header,
-      message,
-      buttons: [
-        {
-          text: 'Aceptar',
-          handler: () => {
-            this.navCtrl.navigateRoot(redirectUrl);  // Redirigir según el rol
-          }
-        }
-      ]
-    });
-
-    await alert.present();
+    const success = await this.usuarioService.login(this.email, this.password);
+    if (success) {
+      const toast = await this.toastController.create({
+        message: 'Inicio de sesión exitoso.',
+        duration: 2000,
+        color: 'success'
+      });
+      toast.present();
+      this.navCtrl.navigateRoot('/home');
+    } else {
+      this.errorMessage = 'Correo o contraseña incorrectos.';
+      const toast = await this.toastController.create({
+        message: 'Correo o contraseña incorrectos.',
+        duration: 2000,
+        color: 'danger'
+      });
+      toast.present();
+    }
   }
 
   // Método para navegar a la página de recuperación de contraseña
   navigateToRecover() {
     this.navCtrl.navigateForward('/recuperarc');
+  }
+
+  // Método para navegar a la página de registro
+  navigateToRegister() {
+    this.navCtrl.navigateForward('/registro');
   }
 }

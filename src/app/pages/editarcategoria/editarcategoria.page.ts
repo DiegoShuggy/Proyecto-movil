@@ -100,7 +100,10 @@ export class EditarCategoriaPage implements OnInit {
   }
 
   async deleteCategoria(categoria: Categoria) {
-    await this.dbService.deleteCategoria(categoria.id_categoria);
-    this.loadCategorias();
+    // Asegúrate de que id_categoria no sea undefined antes de eliminar
+    if (categoria.id_categoria !== undefined) { // Línea modificada
+      await this.dbService.deleteCategoria(categoria.id_categoria);
+      this.loadCategorias();
+    }
   }
 }

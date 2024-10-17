@@ -15,7 +15,7 @@
   <ion-list>
     <ion-item *ngFor="let categoria of categorias">
       <ion-label>
-        <ion-input [(ngModel)]="categoria.nombre"></ion-input>
+        <ion-input [(ngModel)]="categoria.nombre" required></ion-input> <!-- Línea modificada: Añadido 'required' -->
       </ion-label>
       <ion-button (click)="confirmUpdateCategoria(categoria)">
         Guardar

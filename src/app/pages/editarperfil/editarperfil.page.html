@@ -1,39 +1,50 @@
-<ion-header [translucent]="true">
+<!-- src/app/pages/editarperfil/editarperfil.page.html -->
+<ion-header>
   <ion-toolbar>
-    <ion-menu-button slot="start"></ion-menu-button>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
     <ion-title>Editar Perfil</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <!-- Campo Nombre -->
-  <ion-item>
-    <ion-label position="floating">Nombre</ion-label>
-    <ion-input [(ngModel)]="usuario.Nombre" type="text"></ion-input>
-  </ion-item>
-  <!-- Campo Correo -->
-  <ion-item>
-    <ion-label position="floating">Correo Electrónico</ion-label>
-    <ion-input [(ngModel)]="usuario.Correo" type="email"></ion-input>
-  </ion-item>
-  <!-- Campo Contraseña -->
-  <ion-item>
-    <ion-label position="floating">Contraseña</ion-label>
-    <ion-input [(ngModel)]="usuario.Password" type="password"></ion-input>
-  </ion-item>
-  <!-- Campo Dirección (Casa) -->
-  <ion-item>
-    <ion-label position="floating">Dirección</ion-label>
-    <ion-input [(ngModel)]="usuario.Direccion" type="text"></ion-input>
-  </ion-item>
-  <!-- Botón para tomar foto -->
-  <ion-button expand="full" (click)="takePicture()">
-    Tomar Foto
-  </ion-button>
-  <!-- Mostrar la imagen capturada -->
-  <ion-img [src]="usuario.avatar ? createObjectURL(usuario.avatar) : ''" *ngIf="usuario.avatar"></ion-img>
-  <!-- Botón de Guardar Cambios -->
-  <ion-button (click)="saveChanges()" expand="full" class="ion-margin-top">
-    Guardar Cambios
-  </ion-button>
+  <form (ngSubmit)="saveChanges()">
+    <!-- Campo Nombre -->
+    <ion-item>
+      <ion-label position="floating">Nombre</ion-label>
+      <ion-input [(ngModel)]="usuario.Nombre" name="nombre" type="text" required></ion-input>
+    </ion-item>
+
+    <!-- Campo Correo Electrónico -->
+    <ion-item>
+      <ion-label position="floating">Correo Electrónico</ion-label>
+      <ion-input [(ngModel)]="usuario.Correo" name="correo" type="email" required></ion-input>
+    </ion-item>
+
+    <!-- Campo Contraseña -->
+    <ion-item>
+      <ion-label position="floating">Contraseña</ion-label>
+      <ion-input [(ngModel)]="usuario.Password" name="password" type="password" required></ion-input>
+    </ion-item>
+
+    <!-- Campo Dirección -->
+    <ion-item>
+      <ion-label position="floating">Dirección</ion-label>
+      <ion-input [(ngModel)]="usuario.Direccion" name="direccion" type="text" required></ion-input>
+    </ion-item>
+
+    <!-- Botón para tomar foto -->
+    <ion-button expand="full" (click)="takePicture()">
+      Tomar Foto
+    </ion-button>
+
+    <!-- Mostrar la imagen capturada -->
+    <ion-img [src]="avatarURL" *ngIf="avatarURL"></ion-img>
+
+    <!-- Botón de Guardar Cambios -->
+    <ion-button type="submit" expand="full" class="ion-margin-top">
+      Guardar Cambios
+    </ion-button>
+  </form>
 </ion-content>

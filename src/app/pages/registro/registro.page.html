@@ -1,4 +1,4 @@
-<!-- src/app/pages/registro/registro.page.html-->
+<!-- src/app/pages/registro/registro.page.html -->
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
@@ -12,63 +12,49 @@
   <div class="form-container">
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <!-- Campo Nombre -->
-      <ion-item class="form-item">
+      <ion-item>
         <ion-label position="floating">Nombre</ion-label>
-        <ion-input type="text" formControlName="name"></ion-input>
+        <ion-input formControlName="name" type="text" required></ion-input>
       </ion-item>
-      <div *ngIf="form.controls['name'].invalid && submitted" class="validation-error">
+      <div *ngIf="submitted && form.controls['name'].errors" class="validation-error">
         El nombre es requerido.
       </div>
 
-      <!-- Campo Email -->
-      <ion-item class="form-item">
-        <ion-label position="floating">Email</ion-label>
-        <ion-input type="email" formControlName="email"></ion-input>
+      <!-- Campo Correo Electrónico -->
+      <ion-item>
+        <ion-label position="floating">Correo Electrónico</ion-label>
+        <ion-input formControlName="email" type="email" required></ion-input>
       </ion-item>
-      <div *ngIf="form.controls['email'].invalid && submitted" class="validation-error">
-        El email es requerido y debe ser válido.
+      <div *ngIf="submitted && form.controls['email'].errors" class="validation-error">
+        <p *ngIf="form.controls['email'].errors['required']">El correo es requerido.</p>
+        <p *ngIf="form.controls['email'].errors['email']">Correo inválido.</p>
       </div>
 
       <!-- Campo Contraseña -->
-      <ion-item class="form-item">
+      <ion-item>
         <ion-label position="floating">Contraseña</ion-label>
-        <ion-input type="password" formControlName="password"></ion-input>
+        <ion-input formControlName="password" type="password" required></ion-input>
       </ion-item>
-      <div *ngIf="form.controls['password'].hasError('required') && submitted" class="validation-error">
-        La contraseña es requerida.
-      </div>
-      <div *ngIf="form.controls['password'].hasError('upperCase') && submitted" class="validation-error">
-        La contraseña debe contener al menos una letra mayúscula.
-      </div>
-      <div *ngIf="form.controls['password'].hasError('number') && submitted" class="validation-error">
-        La contraseña debe contener al menos un número.
-      </div>
-      <div *ngIf="form.controls['password'].hasError('specialChar') && submitted" class="validation-error">
-        La contraseña debe contener al menos un carácter especial.
-      </div>
-      <div *ngIf="form.controls['password'].hasError('minlength') && submitted" class="validation-error">
-        La contraseña debe tener al menos 4 caracteres.
-      </div>
-      <div *ngIf="form.controls['password'].hasError('maxlength') && submitted" class="validation-error">
-        La contraseña no debe exceder los 32 caracteres.
+      <div *ngIf="submitted && form.controls['password'].errors" class="validation-error">
+        <p *ngIf="form.controls['password'].errors['required']">La contraseña es requerida.</p>
+        <p *ngIf="form.controls['password'].errors['upperCase']">Debe contener al menos una letra mayúscula.</p>
+        <p *ngIf="form.controls['password'].errors['number']">Debe contener al menos un número.</p>
+        <p *ngIf="form.controls['password'].errors['specialChar']">Debe contener al menos un carácter especial.</p>
+        <p *ngIf="form.controls['password'].errors['minlength']">La contraseña debe tener al menos 4 caracteres.</p>
+        <p *ngIf="form.controls['password'].errors['maxlength']">La contraseña no puede exceder 32 caracteres.</p>
       </div>
 
       <!-- Campo Confirmar Contraseña -->
-      <ion-item class="form-item">
+      <ion-item>
         <ion-label position="floating">Confirmar Contraseña</ion-label>
-        <ion-input type="password" formControlName="confirmPassword"></ion-input>
+        <ion-input formControlName="confirmPassword" type="password" required></ion-input>
       </ion-item>
-      <div *ngIf="form.hasError('mismatch') && submitted" class="validation-error">
+      <div *ngIf="submitted && form.errors?.['mismatch']" class="validation-error">
         Las contraseñas no coinciden.
       </div>
 
-      <!-- Texto de Términos y Condiciones -->
-      <ion-text color="medium" class="terms-text">
-        <p>Al hacer clic en Registrarse, aceptas los <a href="#">Términos y Condiciones</a></p>
-      </ion-text>
-
-      <!-- Botón de Envío -->
-      <ion-button expand="full" type="submit" (click)="onSubmit()" class="submit-button">Registrarse</ion-button>
+      <!-- Botón de Registro -->
+      <ion-button expand="full" type="submit" class="submit-button">Registrar</ion-button>
     </form>
   </div>
 </ion-content>

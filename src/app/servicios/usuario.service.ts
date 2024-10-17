@@ -1,3 +1,4 @@
+// src/app/servicios/usuario.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Usuario } from '../models/usuario';
@@ -8,30 +9,72 @@ import { DbService } from './db.service';
 })
 export class UsuarioService {
   private usuarioSubject = new BehaviorSubject<Usuario | null>(null);
-  usuario$ = this.usuarioSubject.asObservable();
+  public usuario$ = this.usuarioSubject.asObservable();
 
   constructor(private dbService: DbService) {
     this.loadUserData();
   }
 
+  // Carga los datos del usuario actual desde la base de datos
   private async loadUserData() {
     try {
-      const usuarios = await this.dbService.getUsuarios();
-      if (usuarios.length > 0) {
-        this.usuarioSubject.next(usuarios[0]); // Asignar solo el primer usuario
+      const currentUserId = await this.dbService.getCurrentUserId();
+      if (currentUserId) {
+        const usuario = await this.dbService.getUsuarioById(currentUserId);
+        if (usuario) {
+          this.usuarioSubject.next(usuario);
+        }
       }
     } catch (error) {
       console.error('Error al cargar los datos del usuario:', error);
     }
   }
-  
 
-  async updateUsuario(usuario: Usuario) {
+  // Método de login
+  async login(email: string, password: string): Promise<boolean> {
+    try {
+      const usuario = await this.dbService.login(email, password);
+      if (usuario) {
+        this.usuarioSubject.next(usuario);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error('Error en el login:', error);
+      return false;
+    }
+  }
+
+  // Método de logout
+  async logout(): Promise<void> {
+    try {
+      await this.dbService.clearSession();
+      this.usuarioSubject.next(null);
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
+  }
+
+  // Método para registrar un nuevo usuario
+  async register(usuario: Usuario): Promise<void> {
+    try {
+      await this.dbService.register(usuario);
+      // Después del registro, puedes redirigir al usuario a la página de login
+    } catch (error) {
+      console.error('Error al registrar usuario:', error);
+      throw error;
+    }
+  }
+
+  // Método para actualizar el perfil del usuario
+  async updateUsuario(usuario: Usuario): Promise<void> {
     try {
       await this.dbService.updateUsuario(usuario);
       this.usuarioSubject.next(usuario);
     } catch (error) {
-      console.error('Error al actualizar el usuario:', error);
+      console.error('Error al actualizar usuario:', error);
+      throw error;
     }
   }
 }

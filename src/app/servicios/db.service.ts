@@ -48,27 +48,229 @@ export class DbService {
     }
   }
 
- 
+  //inicio
 
- 
-
-
-
-
-  // persistencia de datos con el login para el registro 
-  async login(email: string, password: string): Promise<Usuario | null> {
+  // Método para agregar un nuevo usuario
+  async addUsuario(usuario: Usuario): Promise<void> {
+    if (!this.db) {
+      console.error('Base de datos no inicializada');
+      return;
+    }
     try {
-      const res = await this.db.executeSql('SELECT * FROM Usuario WHERE Correo = ? AND Password = ?', [email, password]);
+      const data = [
+        usuario.Nombre,
+        usuario.Password,
+        usuario.Correo,
+        usuario.Direccion,
+        usuario.id_tipo_usuario,
+        usuario.dirreciones_envio,
+        usuario.avatar,
+      ];
+      await this.db.executeSql(
+        'INSERT INTO Usuario (Nombre, Password, Correo, Direccion, id_tipo_usuario, dirreciones_envio, avatar) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        data
+      );
+      console.log('Usuario añadido correctamente');
+    } catch (e) {
+      console.error('Error al añadir usuario', e);
+      throw e;
+    }
+  }
+
+  // Método para obtener todos los usuarios
+  async getUsuarios(): Promise<Usuario[]> {
+    if (!this.db) {
+      console.error('Base de datos no inicializada');
+      return [];
+    }
+    try {
+      const res = await this.db.executeSql('SELECT * FROM Usuario', []);
+      const usuarios: Usuario[] = [];
+      for (let i = 0; i < res.rows.length; i++) {
+        usuarios.push(res.rows.item(i));
+      }
+      return usuarios;
+    } catch (e) {
+      console.error('Error al obtener usuarios', e);
+      return [];
+    }
+  }
+
+  // Método para actualizar un usuario
+  async updateUsuario(usuario: Usuario): Promise<void> {
+    if (!this.db) {
+      console.error('Base de datos no inicializada');
+      return;
+    }
+    try {
+      const data = [
+        usuario.Nombre,
+        usuario.Password, // Considera encriptar esta contraseña
+        usuario.Correo,
+        usuario.Direccion,
+        usuario.id_tipo_usuario,
+        usuario.dirreciones_envio,
+        usuario.avatar,
+        usuario.id_usuario,
+      ];
+      await this.db.executeSql(
+        `
+        UPDATE Usuario 
+        SET Nombre = ?, Password = ?, Correo = ?, Direccion = ?, id_tipo_usuario = ?, dirreciones_envio = ?, avatar = ?
+        WHERE id_usuario = ?
+        `,
+        data
+      );
+      console.log('Usuario actualizado correctamente');
+    } catch (e) {
+      console.error('Error al actualizar usuario', e);
+      throw e;
+    }
+}
+
+
+  // Método de login: verifica las credenciales y establece la sesión
+  async login(email: string, password: string): Promise<Usuario | null> {
+    if (!this.db) {
+      console.error('Base de datos no inicializada');
+      return null;
+    }
+    try {
+      const res = await this.db.executeSql(
+        'SELECT * FROM Usuario WHERE Correo = ? AND Password = ?',
+        [email, password]
+      );
+      if (res.rows.length > 0) {
+        const usuario: Usuario = res.rows.item(0);
+        await this.setCurrentUser(usuario.id_usuario!);
+        return usuario;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      console.error('Error al iniciar sesión', e);
+      return null;
+    }
+  }
+
+  // Método para registrar un usuario
+  async register(usuario: Usuario): Promise<void> {
+    try {
+      await this.addUsuario(usuario);
+      // Opcional: Auto-login después del registro
+      await this.setCurrentUser(usuario.id_usuario!);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  // Métodos para gestionar la sesión
+
+  // Establece el usuario actual en la tabla Session
+  async setCurrentUser(user_id: number): Promise<void> {
+    try {
+      // Limpiar cualquier sesión existente
+      await this.db.executeSql('DELETE FROM Session', []);
+      // Insertar la nueva sesión
+      await this.db.executeSql('INSERT INTO Session (current_user_id) VALUES (?)', [user_id]);
+      console.log('Sesión establecida correctamente');
+    } catch (e) {
+      console.error('Error al establecer la sesión', e);
+    }
+  }
+
+  // Obtiene el ID del usuario actual desde la tabla Session
+  async getCurrentUserId(): Promise<number | null> {
+    try {
+      const res = await this.db.executeSql('SELECT current_user_id FROM Session LIMIT 1', []);
+      if (res.rows.length > 0) {
+        return res.rows.item(0).current_user_id;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      console.error('Error al obtener el usuario actual', e);
+      return null;
+    }
+  }
+
+  // Limpia la sesión actual
+  async clearSession(): Promise<void> {
+    try {
+      await this.db.executeSql('DELETE FROM Session', []);
+      console.log('Sesión limpiada correctamente');
+    } catch (e) {
+      console.error('Error al limpiar la sesión', e);
+    }
+  }
+
+  // Método para obtener un usuario por su ID
+  async getUsuarioById(id: number): Promise<Usuario | null> {
+    if (!this.db) {
+      console.error('Base de datos no inicializada');
+      return null;
+    }
+    try {
+      const res = await this.db.executeSql('SELECT * FROM Usuario WHERE id_usuario = ?', [id]);
       if (res.rows.length > 0) {
         return res.rows.item(0);
       } else {
         return null;
       }
-    } catch (error) {
-      console.error('Error al iniciar sesión:', error);
+    } catch (e) {
+      console.error('Error al obtener usuario por ID', e);
       return null;
     }
   }
+
+  // Método para obtener categorías
+  async getCategorias(): Promise<Categoria[]> {
+    if (!this.db) {
+      console.error('Base de datos no inicializada');
+      return [];
+    }
+    try {
+      const res = await this.db.executeSql('SELECT * FROM Categoria', []);
+      const categorias: Categoria[] = [];
+      for (let i = 0; i < res.rows.length; i++) {
+        categorias.push(res.rows.item(i));
+      }
+      return categorias;
+    } catch (e) {
+      console.error('Error al obtener categorías', e);
+      return [];
+    }
+  }
+
+
+  //fin
+
+ 
+
+ 
+
+
+
+
+   
+
+  
+
+  async getCurrentUser(): Promise<number | null> {
+    try {
+      const res = await this.db.executeSql('SELECT current_user_id FROM Session LIMIT 1', []);
+      if (res.rows.length > 0) {
+        return res.rows.item(0).current_user_id;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.error('Error getting current user:', error);
+      return null;
+    }
+  }
+
+  
   
   // Método para agregar un producto al carrito
   async addToCart(id_producto: number, cantidad: number) {
@@ -119,14 +321,7 @@ export class DbService {
       .catch(e => console.error('Error añadiendo categoría', e));
   }
 
-  async getCategorias(): Promise<Categoria[]> {
-    const res = await this.db.executeSql('SELECT * FROM Categoria', []);
-    let categorias: Categoria[] = [];
-    for (let i = 0; i < res.rows.length; i++) {
-      categorias.push(res.rows.item(i));
-    }
-    return categorias;
-  }
+ 
 
   async updateCategoria(categoria: Categoria) {
     const data = [categoria.nombre, categoria.imagen, categoria.id_categoria];
@@ -189,21 +384,7 @@ export class DbService {
     }
   }
   
-  // Método para agregar un usuario
-  async addUsuario(usuario: Usuario) {
-    if (!this.db) {
-      console.error('Database is not initialized');
-      return;
-    }
-    try {
-      const data = [usuario.Nombre, usuario.Password, usuario.Correo, usuario.Direccion, usuario.id_tipo_usuario, usuario.dirreciones_envio, usuario.avatar];
-      await this.db.executeSql('INSERT INTO Usuario (Nombre, Password, Correo, Direccion, id_tipo_usuario, dirreciones_envio, avatar) VALUES (?, ?, ?, ?, ?, ?, ?)', data);
-      console.log('Usuario añadido');
-    } catch (e) {
-      console.error('Error adding usuario', e);
-    }
-  }
-
+  
   
 
  
@@ -218,6 +399,18 @@ export class DbService {
 
   
   private async createTables() {
+
+
+    await this.db.executeSql(
+      `
+      CREATE TABLE IF NOT EXISTS Session (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        current_user_id INTEGER
+      );
+      `,
+      []
+    ).then(() => console.log('Tabla Session creada'))
+     .catch(e => console.error('Error creando tabla Session', e));
 
     // categorias
     await this.db.executeSql(
@@ -450,42 +643,11 @@ export class DbService {
     return this.db.executeSql(query, [estadoEnvio.desc_estado]);
   }
 
-// Método para actualizar un usuario
 
 
-async getUsuarios(): Promise<Usuario[]> {
-  const res = await this.db.executeSql('SELECT * FROM Usuario', []);
-  let usuarios: Usuario[] = [];
-  for (let i = 0; i < res.rows.length; i++) {
-    usuarios.push(res.rows.item(i));
-  }
-  return usuarios;
-}
 
-async updateUsuario(usuario: Usuario) {
-  if (!this.db) {
-    console.error('Database is not initialized');
-    return;
-  }
-  try {
-    const data = [
-      usuario.Nombre, 
-      usuario.Password, 
-      usuario.Correo, 
-      usuario.Direccion, 
-      usuario.id_tipo_usuario, 
-      usuario.dirreciones_envio, 
-      usuario.avatar, 
-      usuario.id_usuario
-    ];
-    await this.db.executeSql(`
-      UPDATE Usuario 
-      SET Nombre = ?, Password = ?, Correo = ?, Direccion = ?, id_tipo_usuario = ?, dirreciones_envio = ?, avatar = ? 
-      WHERE id_usuario = ?
-    `, data);
-    console.log('Usuario actualizado');
-  } catch (error) {
-    console.error('Error updating usuario:', error);
-  }
-}
+
+
+
+
 }
