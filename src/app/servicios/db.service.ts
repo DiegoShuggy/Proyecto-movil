@@ -17,6 +17,12 @@ import { Categoria } from '../models/categoria';
   providedIn: 'root',
 })
 export class DbService {
+  initDb() {
+    throw new Error('Method not implemented.');
+  }
+  addToFavorites(producto: { id: number; nombre: string; precio: number; descripcion: string; imagen: string; }) {
+    throw new Error('Method not implemented.');
+  }
   db!: SQLiteObject;
   private isDbReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
