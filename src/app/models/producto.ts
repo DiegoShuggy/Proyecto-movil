@@ -4,5 +4,5 @@ export interface Producto {
   Nombre: string;
   Descripcion: string;
   Precio: number;
-  Imagen: string; // Cambiado de Blob a string
+  Imagen: any;  // any para que pueda trabajarse como blob la tabla y los metodos en db.service.ts 
 }

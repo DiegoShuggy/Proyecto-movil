@@ -1,4 +1,3 @@
-// src/app/servicios/usuario.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Usuario } from '../models/usuario';
@@ -9,18 +8,18 @@ import { DbService } from './db.service';
 })
 export class UsuarioService {
   private usuarioSubject = new BehaviorSubject<Usuario | null>(null);
-  public usuario$ = this.usuarioSubject.asObservable();
-
-  constructor(private dbService: DbService) {
+  usuario$ = this.usuarioSubject.asObservable();
+  
+  constructor(private db: DbService) {
     this.loadUserData();
   }
 
-  // Carga los datos del usuario actual desde la base de datos
+  // Cargar los datos del usuario actual desde la base de datos
   private async loadUserData() {
     try {
-      const currentUserId = await this.dbService.getCurrentUserId();
+      const currentUserId = await this.db.getCurrentUserId();
       if (currentUserId) {
-        const usuario = await this.dbService.getUsuarioById(currentUserId);
+        const usuario = await this.db.getUsuarioById(currentUserId);
         if (usuario) {
           this.usuarioSubject.next(usuario);
         }
@@ -33,7 +32,7 @@ export class UsuarioService {
   // Método de login
   async login(email: string, password: string): Promise<boolean> {
     try {
-      const usuario = await this.dbService.login(email, password);
+      const usuario = await this.db.login(email, password);
       if (usuario) {
         this.usuarioSubject.next(usuario);
         return true;
@@ -49,8 +48,8 @@ export class UsuarioService {
   // Método de logout
   async logout(): Promise<void> {
     try {
-      await this.dbService.clearSession();
-      this.usuarioSubject.next(null);
+      await this.db.clearSession();
+      this.usuarioSubject.next(null); // Limpia el observable
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
     }
@@ -59,22 +58,45 @@ export class UsuarioService {
   // Método para registrar un nuevo usuario
   async register(usuario: Usuario): Promise<void> {
     try {
-      await this.dbService.register(usuario);
-      // Después del registro, puedes redirigir al usuario a la página de login
+      await this.db.register(usuario); // Asegúrate de que el avatar se esté guardando
     } catch (error) {
       console.error('Error al registrar usuario:', error);
       throw error;
     }
   }
 
-  // Método para actualizar el perfil del usuario
-  async updateUsuario(usuario: Usuario): Promise<void> {
-    try {
-      await this.dbService.updateUsuario(usuario);
-      this.usuarioSubject.next(usuario);
-    } catch (error) {
-      console.error('Error al actualizar usuario:', error);
-      throw error;
+  // Método para obtener el usuario actual
+  async getCurrentUser(): Promise<Usuario | null> {
+    const id_usuario = await this.db.getUsuario(); // Obtener ID del usuario
+    if (id_usuario) {
+      return this.db.getUsuarioById(id_usuario); // Usar el método que obtenga los datos del usuario en función del ID
+    } else {
+      return null;
+    }
+  }
+
+  async updateUsuario(usuario: Usuario) {
+    return this.db.executeSql(
+      'UPDATE Usuario SET Nombre = ?, Correo = ?, Password = ?, Direccion = ?, id_tipo_usuario = ?, dirreciones_envio = ?, avatar = ? WHERE id_usuario = ?',
+      [usuario.Nombre, usuario.Correo, usuario.Password, usuario.Direccion, usuario.id_tipo_usuario, usuario.dirreciones_envio, usuario.avatar, usuario.id_usuario]
+    );
+  }
+  
+
+
+  // Método para actualizar solo el avatar
+  async updateAvatar(avatar: string): Promise<void> {
+    const usuario = this.usuarioSubject.value;
+    if (usuario && usuario.id_usuario !== undefined && usuario.id_usuario !== null) {
+      try {
+        usuario.avatar = avatar;
+        await this.db.modImagenPerfil(usuario.id_usuario, avatar); // Asegúrate de que este método exista en tu db.service.ts
+        this.usuarioSubject.next(usuario); // Actualizar el observable
+      } catch (error) {
+        console.error('Error al actualizar el avatar:', error);
+      }
+    } else {
+      console.error('El ID del usuario es indefinido o nulo.');
     }
   }
 }

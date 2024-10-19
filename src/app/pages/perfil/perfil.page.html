@@ -7,43 +7,37 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ng-container *ngIf="usuario">
-    <!-- Mostrar la imagen del avatar -->
+  <!-- Mostrar la información del usuario solo si está logueado -->
+  <ng-container *ngIf="usuarioLogueado">
     <ion-item *ngIf="avatarURL">
       <ion-label position="stacked">Avatar</ion-label>
-      <ion-img [src]="avatarURL"></ion-img>
+      <ion-img [src]="avatarURL" alt="Avatar del Usuario"></ion-img>
     </ion-item>
 
-    <!-- Nombre -->
     <ion-item>
       <ion-label position="stacked">Nombre</ion-label>
-      <ion-input [(ngModel)]="usuario.Nombre" readonly></ion-input>
+      <ion-input [(ngModel)]="usuarioLogueado.Nombre" readonly></ion-input>
     </ion-item>
 
-    <!-- Correo Electrónico -->
     <ion-item>
       <ion-label position="stacked">Correo Electrónico</ion-label>
-      <ion-input [(ngModel)]="usuario.Correo" readonly></ion-input>
+      <ion-input [(ngModel)]="usuarioLogueado.Correo" readonly></ion-input>
     </ion-item>
 
-    <!-- Contraseña -->
     <ion-item>
       <ion-label position="stacked">Contraseña</ion-label>
-      <ion-input [(ngModel)]="usuario.Password" type="password" readonly></ion-input>
+      <ion-input [(ngModel)]="usuarioLogueado.Password" type="password" readonly></ion-input>
     </ion-item>
 
-    <!-- Dirección -->
     <ion-item>
       <ion-label position="stacked">Dirección</ion-label>
-      <ion-input [(ngModel)]="usuario.Direccion" readonly></ion-input>
+      <ion-input [(ngModel)]="usuarioLogueado.Direccion" readonly></ion-input>
     </ion-item>
 
-    <!-- Botón para editar perfil -->
     <ion-button expand="full" routerLink="/editarperfil">
       Editar Perfil
     </ion-button>
 
-    <!-- Botón para cerrar sesión -->
     <ion-button expand="full" color="danger" (click)="cerrarSesion()">
       Cerrar Sesión
     </ion-button>

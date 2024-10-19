@@ -12,6 +12,8 @@ import { DetallePedido } from '../models/detalle-pedido';
 import { Envio } from '../models/envio';
 import { EstadoEnvio } from '../models/estado-envio';
 import { Categoria } from '../models/categoria';
+import { AlertController } from '@ionic/angular';
+
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +28,7 @@ export class DbService {
   db!: SQLiteObject;
   private isDbReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  constructor(private sqlite: SQLite) {
+  constructor(private sqlite: SQLite, private alertController: AlertController) {
     this.initializeDatabase();
   }
 
@@ -54,9 +56,247 @@ export class DbService {
     }
   }
 
-  //inicio
+  // Definición del método executeSql
+  async executeSql(sql: string, params: any[] = []): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.db.executeSql(sql, params)
+        .then(res => resolve(res))
+        .catch(err => reject(err));
+    });
+  }
+
+ 
+
+  
+
+
+  // Método para iniciar sesión
+  async login(email: string, password: string): Promise<Usuario | null> {
+    if (!this.db) {
+      console.error('Base de datos no inicializada');
+      return null;
+    }
+
+    try {
+      const res = await this.db.executeSql(
+        'SELECT * FROM Usuario WHERE Correo = ? AND Password = ?',
+        [email, password]
+      );
+
+      if (res.rows.length > 0) {
+        const usuario: Usuario = new Usuario(
+          res.rows.item(0).Nombre,
+          res.rows.item(0).Password,
+          res.rows.item(0).Correo,
+          res.rows.item(0).Direccion,
+          res.rows.item(0).id_tipo_usuario,
+          res.rows.item(0).dirreciones_envio,
+          res.rows.item(0).avatar,
+          res.rows.item(0).id_usuario
+        );
+
+        // Guarda el ID de usuario en localStorage
+        await localStorage.setItem(
+          'id_usuario',
+          usuario.id_usuario?.toString() || '0'
+        );
+        await this.setCurrentUser(usuario.id_usuario!);
+        return usuario;
+      } else {
+        console.warn('Usuario no encontrado o credenciales incorrectas');
+        return null;
+      }
+    } catch (e) {
+      console.error('Error al iniciar sesión', e);
+      return null;
+    }
+  }
+  
+  
+  
+  
+
+  /// Método para registrar un usuario
+  async register(usuario: Usuario): Promise<void> {
+    const sql =
+      'INSERT INTO Usuario (Nombre, Password, Correo, Direccion, id_tipo_usuario, avatar) VALUES (?, ?, ?, ?, ?, ?)';
+    const params = [
+      usuario.Nombre,
+      usuario.Password,
+      usuario.Correo,
+      usuario.Direccion,
+      usuario.id_tipo_usuario,
+      usuario.avatar,
+    ];
+    await this.db.executeSql(sql, params);
+    console.log('Usuario registrado con éxito:', usuario);
+  }
 
   // Método para agregar un nuevo usuario
+
+  
+
+  // Método para actualizar un usuario
+  async actualizarUsuario(usuario: Usuario) {
+    const sql =
+      'UPDATE Usuario SET Nombre=?, Password=?, Correo=?, Direccion=?, avatar=? WHERE id_usuario=?';
+    const valores = [
+      usuario.Nombre,
+      usuario.Password,
+      usuario.Correo,
+      usuario.Direccion,
+      usuario.avatar,
+      usuario.id_usuario,
+    ];
+    return this.db.executeSql(sql, valores);
+  }
+
+  // de aqui
+// Método para obtener un usuario por su ID
+async getUsuarioById(id_usuario: number): Promise<Usuario | null> {
+  console.log(`Buscando usuario con ID: ${id_usuario}`);
+  const query = 'SELECT * FROM Usuario WHERE id_usuario = ?';
+  const result = await this.db.executeSql(query, [id_usuario]);
+  if (result.rows.length > 0) {
+    return result.rows.item(0); // Retorna el primer resultado
+  }
+  return null; // Si no se encuentra, retorna null
+}
+
+// Establece el usuario actual en la tabla Session
+async setCurrentUser(user_id: number): Promise<void> {
+  try {
+    // Limpiar cualquier sesión existente
+    await this.db.executeSql('DELETE FROM Session', []);
+    // Insertar la nueva sesión
+    await this.db.executeSql(
+      'INSERT INTO Session (current_user_id) VALUES (?)',
+      [user_id]
+    );
+    console.log('Sesión establecida correctamente');
+  } catch (e) {
+    console.error('Error al establecer la sesión', e);
+  }
+}
+
+// Obtiene el ID del usuario actual desde la tabla Session
+async getCurrentUserId(): Promise<number | null> {
+  const userId = localStorage.getItem('currentUserId');
+  return userId ? parseInt(userId, 10) : null;
+}
+
+// Métodos para gestionar el avatar del usuario
+setAvatarURL(avatar: Blob | undefined) {
+  if (avatar && avatar.size > 0) {
+    const avatarURL = URL.createObjectURL(avatar);
+    console.log('URL generada para el avatar:', avatarURL);
+    return avatarURL;
+  } else {
+    const defaultAvatar = 'assets/img/default-avatar.png'; // Imagen por defecto
+    return defaultAvatar;
+  }
+}
+
+async setAvatar(usuarioId: number, avatar: Blob): Promise<void> {
+  await this.db.executeSql(
+    'UPDATE Usuario SET avatar = ? WHERE id_usuario = ?',
+    [avatar, usuarioId]
+  );
+}
+
+async getAvatar(usuarioId: number): Promise<Blob | null> {
+  const res = await this.db.executeSql(
+    'SELECT avatar FROM Usuario WHERE id_usuario = ?',
+    [usuarioId]
+  );
+  if (res.rows.length > 0) {
+    return res.rows.item(0).avatar;
+  }
+  return null;
+}
+
+// Otros métodos relacionados con usuarios
+async getCurrentUser(): Promise<number | null> {
+  try {
+    const res = await this.db.executeSql(
+      'SELECT current_user_id FROM Session LIMIT 1',
+      []
+    );
+    if (res.rows.length > 0) {
+      return res.rows.item(0).current_user_id;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error('Error getting current user:', error);
+    return null;
+  }
+}
+
+async getUsuario(): Promise<number> {
+  const id = await localStorage.getItem('id_usuario');
+  if (id) {
+    return Number(id);
+  } else {
+    console.warn('No se encontró el ID del usuario en localStorage.');
+    return -1;
+  }
+}
+
+// src/app/services/db.service.ts
+async modImagenPerfil(id_usuario: number, imagen: any) {
+  try {
+    const data = await this.db.executeSql(
+      'SELECT * FROM Usuario WHERE id_usuario = ?', // Cambiado 'usuarios' a 'Usuario'
+      [id_usuario]
+    );
+    if (data.rows.length > 0) {
+      await this.db.executeSql(
+        'UPDATE Usuario SET avatar = ? WHERE id_usuario = ?', // Cambiado 'imagen_user' a 'avatar'
+        [imagen, id_usuario]
+      );
+      this.presentAlert(
+        'Imagen actualizada correctamente',
+        'La imagen se ha actualizado en la base de datos.'
+      );
+    } else {
+      this.presentAlert(
+        'Usuario no encontrado',
+        'No se encontraron registros para este usuario.'
+      );
+    }
+  } catch (error) {
+    this.presentAlert(
+      'Error al modificar la imagen',
+      'Ha ocurrido un error al actualizar la imagen.'
+    );
+    console.error('Error al modificar la imagen:', error);
+  }
+}
+
+
+// Método para mostrar alertas
+async presentAlert(header: string, message: string) {
+  const alert = await this.alertController.create({
+    header,
+    message,
+    buttons: ['OK'],
+  });
+  await alert.present();
+}
+
+// Limpia la sesión actual
+async clearSession(): Promise<void> {
+  try {
+    await this.db.executeSql('DELETE FROM Session', []);
+    console.log('Sesión limpiada correctamente');
+  } catch (e) {
+    console.error('Error al limpiar la sesión', e);
+  }
+}
+  //hasta aqui
+
+
   async addUsuario(usuario: Usuario): Promise<void> {
     if (!this.db) {
       console.error('Base de datos no inicializada');
@@ -83,199 +323,73 @@ export class DbService {
     }
   }
 
-  // Método para obtener todos los usuarios
-  async getUsuarios(): Promise<Usuario[]> {
-    if (!this.db) {
-      console.error('Base de datos no inicializada');
-      return [];
-    }
-    try {
-      const res = await this.db.executeSql('SELECT * FROM Usuario', []);
-      const usuarios: Usuario[] = [];
-      for (let i = 0; i < res.rows.length; i++) {
-        usuarios.push(res.rows.item(i));
-      }
-      return usuarios;
-    } catch (e) {
-      console.error('Error al obtener usuarios', e);
-      return [];
-    }
-  }
-
   // Método para actualizar un usuario
+  // Método para actualizar el usuario en src/app/servicios/db.service.ts
   async updateUsuario(usuario: Usuario): Promise<void> {
-    if (!this.db) {
-      console.error('Base de datos no inicializada');
-      return;
-    }
-    try {
-      const data = [
-        usuario.Nombre,
-        usuario.Password, // Considera encriptar esta contraseña
-        usuario.Correo,
-        usuario.Direccion,
-        usuario.id_tipo_usuario,
-        usuario.dirreciones_envio,
-        usuario.avatar,
-        usuario.id_usuario,
-      ];
-      await this.db.executeSql(
-        `
-        UPDATE Usuario 
-        SET Nombre = ?, Password = ?, Correo = ?, Direccion = ?, id_tipo_usuario = ?, dirreciones_envio = ?, avatar = ?
-        WHERE id_usuario = ?
-        `,
-        data
-      );
-      console.log('Usuario actualizado correctamente');
-    } catch (e) {
-      console.error('Error al actualizar usuario', e);
-      throw e;
-    }
+    const sql = 'UPDATE Usuario SET Nombre = ?, Password = ?, Correo = ?, Direccion = ?, id_tipo_usuario = ?, avatar = ? WHERE id_usuario = ?';
+    const params = [usuario.Nombre, usuario.Password, usuario.Correo, usuario.Direccion, usuario.id_tipo_usuario, usuario.avatar, usuario.id_usuario];
+    await this.db.executeSql(sql, params);
 }
-
-
-  // Método de login: verifica las credenciales y establece la sesión
-  async login(email: string, password: string): Promise<Usuario | null> {
-    if (!this.db) {
-      console.error('Base de datos no inicializada');
-      return null;
-    }
-    try {
-      const res = await this.db.executeSql(
-        'SELECT * FROM Usuario WHERE Correo = ? AND Password = ?',
-        [email, password]
-      );
-      if (res.rows.length > 0) {
-        const usuario: Usuario = res.rows.item(0);
-        await this.setCurrentUser(usuario.id_usuario!);
-        return usuario;
-      } else {
-        return null;
-      }
-    } catch (e) {
-      console.error('Error al iniciar sesión', e);
-      return null;
-    }
-  }
-
-  // Método para registrar un usuario
-  async register(usuario: Usuario): Promise<void> {
-    try {
-      await this.addUsuario(usuario);
-      // Opcional: Auto-login después del registro
-      await this.setCurrentUser(usuario.id_usuario!);
-    } catch (e) {
-      throw e;
-    }
-  }
-
-  // Métodos para gestionar la sesión
-
-  // Establece el usuario actual en la tabla Session
-  async setCurrentUser(user_id: number): Promise<void> {
-    try {
-      // Limpiar cualquier sesión existente
-      await this.db.executeSql('DELETE FROM Session', []);
-      // Insertar la nueva sesión
-      await this.db.executeSql('INSERT INTO Session (current_user_id) VALUES (?)', [user_id]);
-      console.log('Sesión establecida correctamente');
-    } catch (e) {
-      console.error('Error al establecer la sesión', e);
-    }
-  }
-
-  // Obtiene el ID del usuario actual desde la tabla Session
-  async getCurrentUserId(): Promise<number | null> {
-    try {
-      const res = await this.db.executeSql('SELECT current_user_id FROM Session LIMIT 1', []);
-      if (res.rows.length > 0) {
-        return res.rows.item(0).current_user_id;
-      } else {
-        return null;
-      }
-    } catch (e) {
-      console.error('Error al obtener el usuario actual', e);
-      return null;
-    }
-  }
-
-  // Limpia la sesión actual
-  async clearSession(): Promise<void> {
-    try {
-      await this.db.executeSql('DELETE FROM Session', []);
-      console.log('Sesión limpiada correctamente');
-    } catch (e) {
-      console.error('Error al limpiar la sesión', e);
-    }
-  }
-
-  // Método para obtener un usuario por su ID
-  async getUsuarioById(id: number): Promise<Usuario | null> {
-    if (!this.db) {
-      console.error('Base de datos no inicializada');
-      return null;
-    }
-    try {
-      const res = await this.db.executeSql('SELECT * FROM Usuario WHERE id_usuario = ?', [id]);
-      if (res.rows.length > 0) {
-        return res.rows.item(0);
-      } else {
-        return null;
-      }
-    } catch (e) {
-      console.error('Error al obtener usuario por ID', e);
-      return null;
-    }
-  }
-
-  // Método para obtener categorías
-  async getCategorias(): Promise<Categoria[]> {
-    if (!this.db) {
-      console.error('Base de datos no inicializada');
-      return [];
-    }
-    try {
-      const res = await this.db.executeSql('SELECT * FROM Categoria', []);
-      const categorias: Categoria[] = [];
-      for (let i = 0; i < res.rows.length; i++) {
-        categorias.push(res.rows.item(i));
-      }
-      return categorias;
-    } catch (e) {
-      console.error('Error al obtener categorías', e);
-      return [];
-    }
-  }
-
-
-  //fin
-
- 
-
- 
-
-
-
-
-   
 
   
 
-  async getCurrentUser(): Promise<number | null> {
-    try {
-      const res = await this.db.executeSql('SELECT current_user_id FROM Session LIMIT 1', []);
-      if (res.rows.length > 0) {
-        return res.rows.item(0).current_user_id;
-      } else {
-        return null;
-      }
-    } catch (error) {
-      console.error('Error getting current user:', error);
-      return null;
-    }
-  }
 
+
+  
+  
+  
+
+ // Obtener usuario por ID
+async fetchUsuarioById(id_usuario: number): Promise<Usuario | null> {
+  // Ajusta la consulta
+  const result = await this.db.executeSql('SELECT * FROM Usuario WHERE id_usuario = ?', [id_usuario]); // Cambiado 'usuario' a 'Usuario'
+
+  if (result.rows.length > 0) {
+    return {
+      id_usuario: result.rows.item(0).id_usuario,
+      Nombre: result.rows.item(0).Nombre,
+      Correo: result.rows.item(0).Correo,
+      Password: result.rows.item(0).Password,  // Añade esto
+      Direccion: result.rows.item(0).Direccion,  // Añade esto
+      id_tipo_usuario: result.rows.item(0).id_tipo_usuario,  // Añade esto
+      dirreciones_envio: result.rows.item(0).dirreciones_envio,  // Añade esto
+      avatar: result.rows.item(0).avatar
+    };
+  }
+  return null;
+}
+
+// Método para modificar la contraseña
+modContrasena(correo: string, nuevaContrasena: string) {
+  return this.db.executeSql('SELECT * FROM Usuario WHERE Correo = ?', [correo]) // Cambiado 'usuarios' a 'Usuario'
+    .then(data => {
+      if (data.rows.length > 0) {
+        const id_usuario = data.rows.item(0).id_usuario;
+
+        return this.db.executeSql('UPDATE Usuario SET Password = ? WHERE id_usuario = ?', [nuevaContrasena, id_usuario]) // Cambiado 'usuarios' a 'Usuario'
+          .then(() => {
+            return {
+              id_usuario: data.rows.item(0).id_usuario,
+              nombre: data.rows.item(0).Nombre, // Asegúrate de que el campo es 'Nombre'
+              correo: data.rows.item(0).Correo, // Asegúrate de que el campo es 'Correo'
+              rol_id: data.rows.item(0).id_tipo_usuario, // Cambiado 'rol_id' a 'id_tipo_usuario'
+              mensaje: 'Contraseña actualizada exitosamente'
+            };
+          });
+      } else {
+        return {
+          mensaje: 'Usuario no encontrado'
+        };
+      }
+    })
+    .catch(error => {
+      console.error('Error al modificar la contraseña:', error);
+      throw error;
+    });
+}
+
+
+  
   
   
   // Método para agregar un producto al carrito
@@ -318,6 +432,26 @@ export class DbService {
   }
 
 
+ // Método para obtener categorías
+ async getCategorias(): Promise<Categoria[]> {
+  if (!this.db) {
+    console.error('Base de datos no inicializada');
+    return [];
+  }
+  try {
+    const res = await this.db.executeSql('SELECT * FROM Categoria', []);
+    const categorias: Categoria[] = [];
+    for (let i = 0; i < res.rows.length; i++) {
+      categorias.push(res.rows.item(i));
+    }
+    return categorias;
+  } catch (e) {
+    console.error('Error al obtener categorías', e);
+    return [];
+  }
+}
+
+
   //categorias para productos
 
   async addCategoria(categoria: Categoria) {
@@ -344,20 +478,37 @@ export class DbService {
   
   // todo lo que tienee que ver con gestion de productos
 
-  async addProducto(producto: Producto) {
-    const data = [producto.Nombre, producto.Descripcion, producto.Precio, producto.Imagen];
-    await this.db.executeSql('INSERT INTO Producto (nombre, descripcion, precio, imagen) VALUES (?, ?, ?, ?)', data)
-      .then(() => console.log('Producto añadido'))
-      .catch(e => console.error('Error añadiendo producto', e));
+   // Método para agregar producto (solo si no lo tienes ya)
+   addProducto(producto: Producto): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const query = `INSERT INTO Producto (Nombre, Descripcion, Precio, Imagen) VALUES (?, ?, ?, ?)`;
+      const params = [producto.Nombre, producto.Descripcion, producto.Precio, producto.Imagen];
+      this.db.executeSql(query, params).then(
+        () => resolve(),
+        (err) => reject(err)
+      );
+    });
   }
-
-  async getProductos(): Promise<Producto[]> {
-    const res = await this.db.executeSql('SELECT * FROM Producto', []);
-    let productos: Producto[] = [];
-    for (let i = 0; i < res.rows.length; i++) {
-      productos.push(res.rows.item(i));
-    }
-    return productos;
+  getProductos(): Promise<Producto[]> {
+    return new Promise((resolve, reject) => {
+      const query = 'SELECT * FROM Producto';
+      this.db.executeSql(query, []).then(
+        (res) => {
+          const items: Producto[] = [];
+          for (let i = 0; i < res.rows.length; i++) {
+            items.push({
+              id_producto: res.rows.item(i).id_producto,
+              Nombre: res.rows.item(i).Nombre,
+              Descripcion: res.rows.item(i).Descripcion,
+              Precio: res.rows.item(i).Precio,
+              Imagen: res.rows.item(i).Imagen ? res.rows.item(i).Imagen : null
+            });
+          }
+          resolve(items);
+        },
+        (err) => reject(err)
+      );
+    });
   }
 
   async updateProducto(producto: Producto) {
@@ -375,20 +526,41 @@ export class DbService {
   
   // para mostrar productos en pagina de productos
 
-  // Método para obtener un producto por su id
-  async getProductoById(id: number): Promise<Producto | null> {
-    try {
-      const res = await this.db.executeSql('SELECT * FROM Producto WHERE id_producto = ?', [id]);
-      if (res.rows.length > 0) {
-        return res.rows.item(0);
-      } else {
-        return null;
-      }
-    } catch (e) {
-      console.error('Error obteniendo producto por id', e);
-      return null;
-    }
+  // Método para obtener producto por ID
+  getProductoById(id_producto: number): Promise<Producto> {
+    return new Promise((resolve, reject) => {
+      const query = 'SELECT * FROM Producto WHERE id_producto = ?';
+      this.db.executeSql(query, [id_producto]).then(
+        (res) => {
+          if (res.rows.length > 0) {
+            const producto: Producto = {
+              id_producto: res.rows.item(0).id_producto,
+              Nombre: res.rows.item(0).Nombre,
+              Descripcion: res.rows.item(0).Descripcion,
+              Precio: res.rows.item(0).Precio,
+              Imagen: res.rows.item(0).Imagen ? res.rows.item(0).Imagen : null // Imagen como Blob o string
+            };
+            resolve(producto);
+          } else {
+            reject('Producto no encontrado');
+          }
+        },
+        (err) => reject(err)
+      );
+    });
   }
+  
+  // Método para actualizar la URL de la imagen del producto
+  setProductoImagenUrl(id_producto: number, imagen: any): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const query = 'UPDATE Producto SET Imagen = ? WHERE id_producto = ?';
+      this.db.executeSql(query, [imagen, id_producto]).then(
+        () => resolve(),
+        (err) => reject(err)
+      );
+    });
+  }
+  
   
   
   
@@ -465,7 +637,7 @@ export class DbService {
         Nombre VARCHAR(255),
         Descripcion VARCHAR(255),
         Precio REAL,
-        Imagen VARCHAR(255),
+        Imagen Blob,
         id_tipo_producto INTEGER
       );`,
       []
@@ -570,10 +742,7 @@ export class DbService {
     this.isDbReady.next(true);
   }
 
-  // Métodos CRUD para cada tabla
-  // ===============================
 
-  // Métodos para 'Usuario'
  
   
 
