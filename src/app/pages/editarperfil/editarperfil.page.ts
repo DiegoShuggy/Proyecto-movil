@@ -92,7 +92,7 @@ export class EditarperfilPage implements OnInit, OnDestroy {
             color: 'success'
           });
           toast.present();
-          this.navCtrl.back();
+          this.navCtrl.navigateRoot('/home');
         } catch (error) {
           console.error('Error al guardar el perfil:', error);
           const toast = await this.toastController.create({
