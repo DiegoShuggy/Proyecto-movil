@@ -9,15 +9,13 @@
 
 <ion-content class="ion-padding">
   <ion-list>
-    <ion-item *ngFor="let producto of productos">
-      <ion-card button [routerLink]="['/productos', producto.id_producto]">
-        <ion-card-header>
-          <ion-card-title>{{ producto.Nombre }}</ion-card-title>
-          <ion-card-subtitle>{{ producto.Descripcion }}</ion-card-subtitle>
-        </ion-card-header>
-        <ion-card-content>Precio: {{ producto.Precio | currency }}</ion-card-content>
-        <img [src]="producto.Imagen" alt="Imagen del Producto">
-      </ion-card>
+    <ion-item *ngFor="let producto of productos" (click)="verProducto(producto.id_producto)"> <!-- Aquí se agrega la navegación -->
+      <ion-label>
+        <h2>{{ producto.Nombre }}</h2>
+        <p>{{ producto.Descripcion }}</p>
+        <p>{{ producto.Precio | currency }}</p>
+      </ion-label>
+      <img [src]="producto.Imagen" *ngIf="producto.Imagen" /> <!-- Muestra la imagen del producto -->
     </ion-item>
   </ion-list>
 </ion-content>
