@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ producto?.Nombre }}</ion-title>
+    <ion-title>{{ producto.Nombre }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -12,7 +12,9 @@
     <ion-icon slot="icon-only" name="heart"></ion-icon>
     <ion-toast trigger="corazon" message="El producto se guardó en favoritos" [duration]="5000"></ion-toast>
   </ion-button>
-  <img [src]="producto?.Imagen" alt="Imagen del Producto">
+  
+  <img [src]="producto.Imagen" alt="Imagen del Producto">
+  
   <ion-button id="open-modal" expand="block">Más información</ion-button>
   
   <ion-modal #modal trigger="open-modal" [initialBreakpoint]="0.50" [breakpoints]="[0, 0.25, 0.5, 0.75]">
@@ -21,10 +23,10 @@
         <section>
           <div class="example-label">
             <img src="/assets/icon/estrellas.webp" alt="Imagen del Producto" width="150" height="50">
-            <h3>{{ producto?.Nombre }}</h3>
-            <h4>{{ producto?.Precio | currency }}</h4>
+            <h3>{{ producto.Nombre }}</h3>
+            <h4>{{ producto.Precio | currency }}</h4>
             <h5>Detalles</h5>
-            <h6>{{ producto?.Descripcion }}</h6>
+            <h6>{{ producto.Descripcion }}</h6>
             <ion-button id="open-toast" expand="block" (click)="addToCart()">
               <ion-icon slot="start" name="cart"></ion-icon>
               Añadir al carro

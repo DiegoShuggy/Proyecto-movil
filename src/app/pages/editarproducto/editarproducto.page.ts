@@ -11,7 +11,7 @@ import { Camera, CameraResultType } from '@capacitor/camera';
   styleUrls: ['./editarproducto.page.scss'],
 })
 export class EditarProductoPage implements OnInit {
-  
+
   productos: Producto[] = [];
   categorias: Categoria[] = [];
   producto: Producto = {
@@ -19,9 +19,10 @@ export class EditarProductoPage implements OnInit {
     Nombre: '',
     Precio: 0,
     Descripcion: '',
-    Imagen: new Blob(), // Inicializamos como un Blob vacío
+    Imagen: new Blob(),
+    id_categoria: 0, // Añadido id_categoria
   };
-  imagenURL: string | ArrayBuffer | null = null; // Para mostrar la imagen en la interfaz
+  imagenURL: string | ArrayBuffer | null = null; 
 
   constructor(
     private dbService: DbService, 
@@ -42,10 +43,9 @@ export class EditarProductoPage implements OnInit {
     this.categorias = await this.dbService.getCategorias();
   }
 
-  // Función para validar el precio
   validatePrecio(producto: Producto) {
     if (producto.Precio < 0) {
-      producto.Precio = 0; // Establecer el precio a 0 si es negativo
+      producto.Precio = 0;
       this.showToast('El precio no puede ser negativo.');
     }
   }
@@ -54,21 +54,18 @@ export class EditarProductoPage implements OnInit {
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: false,
-      resultType: CameraResultType.Base64 // Imagen en formato Base64
+      resultType: CameraResultType.Base64 
     });
-  
     const base64Image = 'data:image/jpeg;base64,' + image.base64String;
-    producto.Imagen = base64Image; // Asigna la imagen al producto
+    producto.Imagen = base64Image;
   }
-  
-  // Actualiza la imagen en la vista previa
+
   setImagenURL(imagen: Blob | undefined) {
     if (imagen && imagen.size > 0) {
       this.imagenURL = URL.createObjectURL(imagen);
     } else {
       this.imagenURL = null;
     }
-
   }
 
   async showToast(message: string) {
@@ -81,6 +78,7 @@ export class EditarProductoPage implements OnInit {
   }
 
   async confirmAddProducto() {
+    console.log('Botón Añadir Producto clickeado');
     const alert = await this.alertController.create({
       header: 'Confirmar',
       message: '¿Estás seguro de que deseas añadir un nuevo producto?',
@@ -103,11 +101,12 @@ export class EditarProductoPage implements OnInit {
 
   async addProducto() {
     const nuevoProducto: Producto = {
-      id_producto: 0, // El ID se autogenera en la base de datos
+      id_producto: 0, 
       Nombre: this.producto.Nombre || 'Nuevo Producto',
       Precio: this.producto.Precio || 0,
       Descripcion: this.producto.Descripcion || 'Descripción del Producto',
-      Imagen: this.producto.Imagen // Ahora manejamos la imagen como Blob
+      Imagen: this.producto.Imagen,
+      id_categoria: this.producto.id_categoria // Asegúrate de incluir el id_categoria aquí
     };
 
     await this.dbService.addProducto(nuevoProducto);
@@ -165,25 +164,24 @@ export class EditarProductoPage implements OnInit {
     const image = await Camera.getPhoto({
         quality: 90,
         allowEditing: false,
-        resultType: CameraResultType.Base64 // Asegúrate de que sea Base64
+        resultType: CameraResultType.Base64 
     });
-
     const base64Image = 'data:image/jpeg;base64,' + image.base64String;
-    this.producto.Imagen = base64Image; // Guarda la imagen en formato Base64
-}
+    this.producto.Imagen = base64Image;
+  }
 
-async guardarProducto() {
+  async guardarProducto() {
     const producto = {
-        id_producto: this.producto.id_producto,
-        Nombre: this.producto.Nombre,
-        Descripcion: this.producto.Descripcion,
-        Precio: this.producto.Precio,
-        Imagen: this.producto.Imagen, // Asegúrate de que este campo esté en formato Base64
+      id_producto: this.producto.id_producto,
+      Nombre: this.producto.Nombre,
+      Descripcion: this.producto.Descripcion,
+      Precio: this.producto.Precio,
+      Imagen: this.producto.Imagen,
+      id_categoria: this.producto.id_categoria // Añadido id_categoria aquí también
     };
 
     await this.dbService.updateProducto(producto);
-    
-}
+  }
 
   async deleteProducto(id_producto: number) {
     await this.dbService.deleteProducto(id_producto);

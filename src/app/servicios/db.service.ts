@@ -508,8 +508,10 @@ async getProductos(): Promise<Producto[]> {
         Nombre: res.rows.item(i).Nombre,
         Descripcion: res.rows.item(i).Descripcion,
         Precio: res.rows.item(i).Precio,
-        Imagen: res.rows.item(i).Imagen ? res.rows.item(i).Imagen : null, // Imagen como Blob
+        Imagen: res.rows.item(i).Imagen ? res.rows.item(i).Imagen : null,
+        id_categoria: res.rows.item(i).id_categoria // Asegúrate de incluir el id_categoria aquí
       });
+      
     }
     return productos;
   } catch (e) {
@@ -536,22 +538,28 @@ async deleteProducto(id_producto: number): Promise<void> {
 }
 
 // Método para obtener un producto por ID con imagen en formato Blob
-async getProductoById(id: number) {
-  const sql = 'SELECT * FROM Producto WHERE id_producto = ?';
-  const result = await this.db.executeSql(sql, [id]);
-
-  if (result.rows.length > 0) {
-      const item = result.rows.item(0);
-      return {
-          id_producto: item.id_producto,
-          Nombre: item.Nombre,
-          Descripcion: item.Descripcion,
-          Precio: item.Precio,
-          Imagen: item.Imagen // Imagen en Base64
-      };
-  }
-  return null;
+getProductoById(id: number): Promise<Producto | null> {
+  return new Promise((resolve, reject) => {
+    this.db.executeSql('SELECT * FROM producto WHERE id_producto = ?', [id])
+      .then(res => {
+        if (res.rows.length > 0) {
+          const item = res.rows.item(0);
+          resolve({
+            id_producto: item.id_producto,
+            Nombre: item.Nombre,
+            Descripcion: item.Descripcion,
+            Precio: item.Precio,
+            Imagen: item.Imagen ? new Blob([item.Imagen]) : null,
+            id_categoria: item.id_categoria // Asegúrate de incluir este campo
+          });
+        } else {
+          resolve(null);
+        }
+      })
+      .catch(e => reject(e));
+  });
 }
+
 
 // Método para actualizar la imagen del producto
 async setProductoImagenUrl(id_producto: number, imagen: Blob): Promise<void> {

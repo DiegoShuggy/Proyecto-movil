@@ -1,3 +1,4 @@
+// src/app/pages/productos/productos.page.ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Producto } from '../../models/producto';
@@ -10,7 +11,15 @@ import { FavoritosService } from '../../servicios/favoritos.service';
   styleUrls: ['./productos.page.scss'],
 })
 export class ProductosPage implements OnInit {
-  producto: Producto | null = null; // Inicializado como null
+  productos: Producto[] = [];
+  producto: Producto = {
+    id_producto: 0,
+    Nombre: '',
+    Precio: 0,
+    Descripcion: '',
+    Imagen: new Blob(),
+    id_categoria: 0 // Incluimos id_categoria por defecto
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -22,10 +31,16 @@ export class ProductosPage implements OnInit {
     const id = +(this.route.snapshot.paramMap.get('id') ?? 0); // Usar coalescencia nula para proporcionar un valor predeterminado
     this.db.getProductoById(id).then((producto: Producto | null) => {
       if (producto) {
-        this.producto = producto;
+        // Asignar los valores correctamente
+        this.producto = {
+          id_producto: producto.id_producto,
+          Nombre: producto.Nombre,
+          Descripcion: producto.Descripcion,
+          Precio: producto.Precio,
+          Imagen: producto.Imagen,
+          id_categoria: producto.id_categoria // Asegúrate de incluir el id_categoria
+        };
       }
-    }).catch(error => {
-      console.error('Error obteniendo producto:', error);
     });
   }
 
