@@ -1,63 +1,59 @@
-import { Component, OnInit } from '@angular/core';
-import { AlertController } from '@ionic/angular';
-import { DbService } from '../../servicios/db.service';
+import { Injectable } from '@angular/core';
 
-@Component({
-  selector: 'app-carrito',
-  templateUrl: './carrito.page.html',
-  styleUrls: ['./carrito.page.scss'],
+@Injectable({
+  providedIn: 'root'
 })
-export class CarritoPage implements OnInit {
-  cartItems: any[] = [];
-  totalCost: number = 0;
+export class CarritoService {
+  private carrito: any[] = [];
 
-  constructor(
-    private dbService: DbService,
-    private alertController: AlertController
-  ) {}
+  constructor() {}
 
-  ngOnInit() {
-    this.dbService.dbState().subscribe(isReady => {
-      if (isReady) {
-        this.loadCartItems();
-      } else {
-        console.error('Database is not ready');
-      }
-    });
+  // Agregar producto al carrito con la cantidad
+  agregarProducto(producto: any, cantidad: number) {
+    const productoExistente = this.carrito.find(p => p.nombre === producto.nombre);
+    if (productoExistente) {
+      productoExistente.cantidad += cantidad; // Aumentar la cantidad si ya existe
+    } else {
+      this.carrito.push({ ...producto, cantidad });
+    }
+    this.guardarCarrito(); // Guardar el carrito actualizado
   }
 
-  async loadCartItems() {
-    this.cartItems = await this.dbService.getCartItems();
-    this.calculateTotal();
+  // Eliminar producto del carrito
+  eliminarProducto(producto: any) {
+    this.carrito = this.carrito.filter(p => p.nombre !== producto.nombre);
+    this.guardarCarrito(); // Guardar el carrito actualizado
   }
 
-  calculateTotal() {
-    this.totalCost = this.cartItems.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
+  // Modificar cantidad de un producto
+  modificarCantidad(producto: any, cantidad: number) {
+    const productoExistente = this.carrito.find(p => p.nombre === producto.nombre);
+    if (productoExistente && (productoExistente.cantidad + cantidad > 0)) {
+      productoExistente.cantidad += cantidad;
+    }
+    this.guardarCarrito(); // Guardar cambios en la cantidad
   }
 
-  async confirmarEliminacion(item: any) {
-    const alert = await this.alertController.create({
-      header: 'Confirmar eliminación',
-      message: '¿Estás seguro de que deseas eliminar este producto del carrito?',
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-        },
-        {
-          text: 'Eliminar',
-          handler: () => {
-            this.eliminarDelCarrito(item);
-          },
-        },
-      ],
-    });
-
-    await alert.present();
+  // Obtener productos en el carrito
+  obtenerCarrito() {
+    return this.carrito;
   }
 
-  async eliminarDelCarrito(item: any) {
-    await this.dbService.deleteFromCart(item.id_producto);
-    this.loadCartItems();
+  // Calcular el costo total
+  obtenerTotal() {
+    return this.carrito.reduce((total, item) => total + (item.precio * item.cantidad), 0);
+  }
+
+  // Guardar carrito en almacenamiento local para persistencia
+  private guardarCarrito() {
+    localStorage.setItem('carrito', JSON.stringify(this.carrito));
+  }
+
+  // Cargar carrito desde almacenamiento local
+  cargarCarrito() {
+    const carritoGuardado = localStorage.getItem('carrito');
+    if (carritoGuardado) {
+      this.carrito = JSON.parse(carritoGuardado);
+    }
   }
 }

@@ -8,7 +8,7 @@ export class CarritoService {
 
   constructor() {}
 
-  agregarProducto(producto: any) {
+  agregarProducto(producto: any, cantidadProducto: number) {
     this.productos.push(producto);
   }
 

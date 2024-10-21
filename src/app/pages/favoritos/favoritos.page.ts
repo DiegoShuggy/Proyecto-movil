@@ -14,9 +14,15 @@ export class FavoritosPage {
     private favoritosService: FavoritosService,
     private alertController: AlertController
   ) {
+    this.cargarFavoritos();
+  }
+
+  // Cargar la lista de favoritos al inicializar la página
+  cargarFavoritos() {
     this.productosFavoritos = this.favoritosService.obtenerFavoritos();
   }
 
+  // Confirmar eliminación de un producto de favoritos
   async confirmarEliminacion(producto: any) {
     const alert = await this.alertController.create({
       header: 'Confirmar eliminación',
@@ -38,8 +44,9 @@ export class FavoritosPage {
     await alert.present();
   }
 
+  // Eliminar producto de la lista de favoritos
   eliminarDeFavoritos(producto: any) {
     this.favoritosService.eliminarDeFavoritos(producto);
-    this.productosFavoritos = this.favoritosService.obtenerFavoritos();
+    this.cargarFavoritos(); // Recargar lista de favoritos
   }
 }

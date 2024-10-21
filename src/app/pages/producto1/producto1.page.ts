@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { DbService } from '../../servicios/db.service';
-import { ProductosService } from '../../servicios/productos.service';
-import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
+import { FavoritosService } from '../../servicios/favoritos.service';
+import { CarritoService } from '../../servicios/carrito.service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-producto1',
@@ -9,43 +10,48 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrls: ['./producto1.page.scss'],
 })
 export class Producto1Page implements OnInit {
-  producto = {
-    id: 1,
-    nombre: 'Collar de pompones',
-    precio: 9999,
-    descripcion: 'Bisutería artesanal, Collar de colores vivos con piedras de plástico',
-    imagen: '/assets/icon/producto1.png' // Imagen por defecto
+  producto: any = {
+    nombre: 'Producto Ejemplo',
+    precio: 50,
+    descripcion: 'Descripción del producto',
+    imagen: 'ruta/a/imagen',
   };
-
-  imagenProducto: any;
+  enFavoritos: boolean = false;
 
   constructor(
-    private dbService: DbService,
-    private productosService: ProductosService,
-    private sanitizer: DomSanitizer
+    private route: ActivatedRoute,
+    private favoritosService: FavoritosService,
+    private carritoService: CarritoService,
+    private toastController: ToastController
   ) {}
 
-  async ngOnInit() {
-    // Inicializar SQLite y cargar productos
-    await this.dbService.initDb();
-    this.convertBlobToImage(); // Cargar imagen del producto en Blob
+  ngOnInit() {
+    // Cargar estado de favoritos
+    this.enFavoritos = this.favoritosService.existeEnFavoritos(this.producto); // Cambié 'estaEnFavoritos' por 'existeEnFavoritos'
   }
 
-  // Convertir Blob a imagen
-  convertBlobToImage() {
-    const blob = new Blob(); // Simulación de obtención de Blob
-    const objectURL = URL.createObjectURL(blob);
-    this.imagenProducto = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+  // Agregar o eliminar de favoritos
+  agregarAFavoritos() {
+    if (this.enFavoritos) {
+      this.favoritosService.eliminarDeFavoritos(this.producto);
+    } else {
+      this.favoritosService.agregarAFavoritos(this.producto);
+    }
+    this.enFavoritos = !this.enFavoritos; // Alternar estado
   }
 
-  // Añadir al carrito y calcular total
-  async addToCart() {
-    const cantidad = 1; // Cantidad del producto
-    await this.dbService.addToCart(this.producto.id, cantidad);
+  // Agregar producto al carrito
+  addToCart() {
+    this.carritoService.agregarProducto(this.producto, 1); // Añadir con cantidad 1
+    this.mostrarToast('Producto agregado al carrito');
   }
 
-  // Añadir producto a favoritos y persistir con SQLite
-  async agregarAFavoritos() {
-    await this.dbService.addToFavorites(this.producto);
+  // Mostrar toast de confirmación
+  async mostrarToast(mensaje: string) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 2000,
+    });
+    toast.present();
   }
 }

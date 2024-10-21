@@ -6,30 +6,42 @@
 </ion-header>
 
 <ion-content>
-  <div class="cart-container">
-    <div *ngFor="let item of cartItems" class="product">
-      <ion-card class="small-card">
-        <ion-card-header>
-          <ion-card-title class="large-text">{{ item.nombre }}</ion-card-title>
-        </ion-card-header>
-        <ion-card-subtitle class="large-text">
-          {{ item.descripcion }}
-        </ion-card-subtitle>
-        <img [src]="item.imagen" alt="Imagen del Producto">
-        <ion-button color="danger" (click)="confirmarEliminacion(item)">
-          <ion-icon slot="start" name="trash"></ion-icon>
-          Eliminar
-        </ion-button>
-      </ion-card>
-    </div>
-
-    <div class="total-cost">
-      <ion-item>
-        <ion-label>Total:</ion-label>
-        <h3><ion-note slot="end">{{ totalCost | currency }}</ion-note></h3>
-      </ion-item>
-    </div>
-
-    <ion-button expand="full" type="button" [routerLink]="['/address']">Ingresa dirección para enviar</ion-button>
+  <div *ngIf="cartItems.length === 0" class="empty-state">
+    <p>Tu carrito está vacío.</p>
   </div>
+
+  <!-- Mostrar productos en el carrito -->
+  <div *ngFor="let item of cartItems" class="product">
+    <ion-card class="small-card">
+      <ion-card-header>
+        <ion-card-title>{{ item.nombre }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-subtitle>{{ item.descripcion }}</ion-card-subtitle>
+      <img [src]="item.imagen" alt="Imagen del Producto">
+
+      <!-- Aumentar o disminuir cantidad del producto -->
+      <ion-item>
+        <ion-label>Cantidad: {{ item.cantidad }}</ion-label>
+        <ion-button (click)="modificarCantidad(item, 1)">+</ion-button>
+        <ion-button (click)="modificarCantidad(item, -1)" [disabled]="item.cantidad <= 1">-</ion-button>
+      </ion-item>
+
+      <!-- Botón para eliminar producto del carrito -->
+      <ion-button color="danger" (click)="eliminarDelCarrito(item)">
+        <ion-icon slot="start" name="trash"></ion-icon>
+        Eliminar del carrito
+      </ion-button>
+    </ion-card>
+  </div>
+
+  <!-- Total de la compra -->
+  <div class="total-cost">
+    <ion-item>
+      <ion-label>Total:</ion-label>
+      <h3><ion-note slot="end">{{ totalCost | currency }}</ion-note></h3>
+    </ion-item>
+  </div>
+
+  <!-- Botón para ingresar dirección -->
+  <ion-button expand="full" type="button" [routerLink]="['/address']">Ingresa dirección para enviar</ion-button>
 </ion-content>

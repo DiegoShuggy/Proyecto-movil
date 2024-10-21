@@ -8,13 +8,13 @@
 </ion-header>
 
 <ion-content class="ion-padding page-background">
-  <!-- Botón para agregar a favoritos -->
-  <ion-button id="corazon" class="corazon" (click)="agregarAFavoritos()">
-    <ion-icon slot="icon-only" name="heart"></ion-icon>
-    <ion-toast trigger="corazon" message="El producto se guardó en favoritos" [duration]="5000"></ion-toast>
+  <!-- Botón para agregar o eliminar de favoritos -->
+  <ion-button [color]="enFavoritos ? 'danger' : 'light'" (click)="agregarAFavoritos()">
+    <ion-icon [name]="enFavoritos ? 'heart' : 'heart-outline'"></ion-icon>
+    {{ enFavoritos ? 'Eliminar de Favoritos' : 'Agregar a Favoritos' }}
   </ion-button>
 
-  <!-- Imagen cargada desde Blob -->
+  <!-- Imagen del producto -->
   <img [src]="imagenProducto" alt="Imagen del Producto">
 
   <!-- Botón para abrir el modal de más información -->
@@ -37,7 +37,6 @@
               <ion-icon slot="start" name="cart"></ion-icon>
               Añadir al carro
             </ion-button>
-            <ion-toast trigger="open-toast" message="El producto se agregó al carro. ¡Muchas gracias!" [duration]="5000"></ion-toast>
 
             <!-- Botón para comprar directamente -->
             <ion-button color="warning" [routerLink]="['/carrito']">

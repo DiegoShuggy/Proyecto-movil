@@ -1,25 +1,26 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class FavoritosService {
-  private productosFavoritos: any[] = [];
+  private favoritos: any[] = [];
 
   constructor() {}
 
   agregarAFavoritos(producto: any) {
-    this.productosFavoritos.push(producto);
+    this.favoritos.push(producto);
   }
 
   eliminarDeFavoritos(producto: any) {
-    const index = this.productosFavoritos.findIndex(p => p.id_producto === producto.id_producto);
-    if (index > -1) {
-      this.productosFavoritos.splice(index, 1);
-    }
+    this.favoritos = this.favoritos.filter(p => p.nombre !== producto.nombre);
+  }
+
+  existeEnFavoritos(producto: any): boolean {
+    return this.favoritos.some(p => p.nombre === producto.nombre);
   }
 
   obtenerFavoritos() {
-    return this.productosFavoritos;
+    return this.favoritos;
   }
 }

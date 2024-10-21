@@ -6,23 +6,29 @@
 </ion-header>
 
 <ion-content>
-  <div *ngIf="productosFavoritos.length === 0">
-    <p>No tienes productos favoritos.</p>
+  <div *ngIf="favoritos.length === 0" class="empty-state">
+    <p>No tienes productos en favoritos.</p>
   </div>
-  <div *ngFor="let producto of productosFavoritos" class="product">
+
+  <!-- Mostrar productos favoritos -->
+  <div *ngFor="let item of favoritos" class="product">
     <ion-card class="small-card">
-      <ion-item [routerLink]="['/productos', producto.id_producto]" detail>
-        <ion-card-header>
-          <ion-card-title class="large-text">{{ producto.nombre }}</ion-card-title>
-        </ion-card-header>
-        <ion-card-subtitle class="large-text">
-          Precio: ${{ producto.precio }}
-        </ion-card-subtitle>
-        <img [src]="producto.imagen" alt="Imagen del Producto">
-      </ion-item>
-      <ion-button color="danger" (click)="confirmarEliminacion(producto)">
+      <ion-card-header>
+        <ion-card-title>{{ item.nombre }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-subtitle>{{ item.descripcion }}</ion-card-subtitle>
+      <img [src]="item.imagen" alt="Imagen del Producto">
+
+      <!-- Botón para eliminar de favoritos -->
+      <ion-button color="danger" (click)="eliminarDeFavoritos(item)">
         <ion-icon slot="start" name="trash"></ion-icon>
-        Eliminar
+        Eliminar de favoritos
+      </ion-button>
+
+      <!-- Botón para ver detalles del producto -->
+      <ion-button [routerLink]="['/producto', item.id]">
+        <ion-icon slot="start" name="eye"></ion-icon>
+        Ver detalles
       </ion-button>
     </ion-card>
   </div>
