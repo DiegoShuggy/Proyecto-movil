@@ -432,8 +432,20 @@ modContrasena(correo: string, nuevaContrasena: string) {
   }
 
 
+
  // Método para obtener categorías
- async getCategorias(): Promise<Categoria[]> {
+ async addCategoria(categoria: Categoria) {
+  const data = [categoria.nombre, categoria.imagen]; // Imagen en formato Blob
+  try {
+    await this.db.executeSql('INSERT INTO Categoria (nombre, imagen) VALUES (?, ?)', data);
+    console.log('Categoría añadida');
+  } catch (e) {
+    console.error('Error añadiendo categoría', e);
+  }
+}
+
+// Método para obtener categorías con imágenes en formato Blob
+async getCategorias(): Promise<Categoria[]> {
   if (!this.db) {
     console.error('Base de datos no inicializada');
     return [];
@@ -442,7 +454,11 @@ modContrasena(correo: string, nuevaContrasena: string) {
     const res = await this.db.executeSql('SELECT * FROM Categoria', []);
     const categorias: Categoria[] = [];
     for (let i = 0; i < res.rows.length; i++) {
-      categorias.push(res.rows.item(i));
+      categorias.push({
+        id_categoria: res.rows.item(i).id_categoria,
+        nombre: res.rows.item(i).nombre,
+        imagen: res.rows.item(i).imagen ? res.rows.item(i).imagen : null, // Imagen como Blob
+      });
     }
     return categorias;
   } catch (e) {
@@ -451,115 +467,103 @@ modContrasena(correo: string, nuevaContrasena: string) {
   }
 }
 
-
-  //categorias para productos
-
-  async addCategoria(categoria: Categoria) {
-    const data = [categoria.nombre, categoria.imagen];
-    await this.db.executeSql('INSERT INTO Categoria (nombre, imagen) VALUES (?, ?)', data)
-      .then(() => console.log('Categoría añadida'))
-      .catch(e => console.error('Error añadiendo categoría', e));
+// Método para actualizar una categoría con imagen en formato Blob
+async updateCategoria(categoria: Categoria) {
+  const data = [categoria.nombre, categoria.imagen, categoria.id_categoria]; // Imagen como Blob
+  try {
+    await this.db.executeSql('UPDATE Categoria SET nombre = ?, imagen = ? WHERE id_categoria = ?', data);
+    console.log('Categoría actualizada');
+  } catch (e) {
+    console.error('Error actualizando categoría', e);
   }
+}
 
- 
+// Método para eliminar una categoría
+async deleteCategoria(id_categoria: number) {
+  try {
+    await this.db.executeSql('DELETE FROM Categoria WHERE id_categoria = ?', [id_categoria]);
+    console.log('Categoría eliminada');
+  } catch (e) {
+    console.error('Error eliminando categoría', e);
+  }
+}
 
-  async updateCategoria(categoria: Categoria) {
-    const data = [categoria.nombre, categoria.imagen, categoria.id_categoria];
-    await this.db.executeSql('UPDATE Categoria SET nombre = ?, imagen = ? WHERE id_categoria = ?', data)
-      .then(() => console.log('Categoría actualizada'))
-      .catch(e => console.error('Error actualizando categoría', e));
-  }
+// Método para agregar un producto con imagen en formato Blob
+async addProducto(producto: any) {
+  const data = [producto.Nombre, producto.Descripcion, producto.Precio, producto.Imagen]; // Imagen en Base64
+  const sql = 'INSERT INTO Producto (Nombre, Descripcion, Precio, Imagen) VALUES (?, ?, ?, ?)';
+  return this.db.executeSql(sql, data);
+}
 
-  async deleteCategoria(id_categoria: number) {
-    await this.db.executeSql('DELETE FROM Categoria WHERE id_categoria = ?', [id_categoria])
-      .then(() => console.log('Categoría eliminada'))
-      .catch(e => console.error('Error eliminando categoría', e));
-  }
-  
-  // todo lo que tienee que ver con gestion de productos
 
-   // Método para agregar producto (solo si no lo tienes ya)
-   addProducto(producto: Producto): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      const query = `INSERT INTO Producto (Nombre, Descripcion, Precio, Imagen) VALUES (?, ?, ?, ?)`;
-      const params = [producto.Nombre, producto.Descripcion, producto.Precio, producto.Imagen];
-      this.db.executeSql(query, params).then(
-        () => resolve(),
-        (err) => reject(err)
-      );
-    });
+// Método para obtener todos los productos con imagen en formato Blob
+async getProductos(): Promise<Producto[]> {
+  const query = 'SELECT * FROM Producto';
+  try {
+    const res = await this.db.executeSql(query, []);
+    const productos: Producto[] = [];
+    for (let i = 0; i < res.rows.length; i++) {
+      productos.push({
+        id_producto: res.rows.item(i).id_producto,
+        Nombre: res.rows.item(i).Nombre,
+        Descripcion: res.rows.item(i).Descripcion,
+        Precio: res.rows.item(i).Precio,
+        Imagen: res.rows.item(i).Imagen ? res.rows.item(i).Imagen : null, // Imagen como Blob
+      });
+    }
+    return productos;
+  } catch (e) {
+    console.error('Error obteniendo productos', e);
+    return [];
   }
-  getProductos(): Promise<Producto[]> {
-    return new Promise((resolve, reject) => {
-      const query = 'SELECT * FROM Producto';
-      this.db.executeSql(query, []).then(
-        (res) => {
-          const items: Producto[] = [];
-          for (let i = 0; i < res.rows.length; i++) {
-            items.push({
-              id_producto: res.rows.item(i).id_producto,
-              Nombre: res.rows.item(i).Nombre,
-              Descripcion: res.rows.item(i).Descripcion,
-              Precio: res.rows.item(i).Precio,
-              Imagen: res.rows.item(i).Imagen ? res.rows.item(i).Imagen : null
-            });
-          }
-          resolve(items);
-        },
-        (err) => reject(err)
-      );
-    });
-  }
+}
 
-  async updateProducto(producto: Producto) {
-    const data = [producto.Nombre, producto.Descripcion, producto.Precio, producto.Imagen, producto.id_producto];
-    await this.db.executeSql('UPDATE Producto SET nombre = ?, descripcion = ?, precio = ?, imagen = ? WHERE id_producto = ?', data)
-      .then(() => console.log('Producto actualizado'))
-      .catch(e => console.error('Error actualizando producto', e));
-  }
+// Método para actualizar un producto con imagen en formato Blob
+async updateProducto(producto: any) {
+  const data = [producto.Nombre, producto.Descripcion, producto.Precio, producto.Imagen, producto.id_producto]; // Imagen en Base64
+  const sql = 'UPDATE Producto SET Nombre = ?, Descripcion = ?, Precio = ?, Imagen = ? WHERE id_producto = ?';
+  return this.db.executeSql(sql, data);
+}
 
-  async deleteProducto(id_producto: number) {
-    await this.db.executeSql('DELETE FROM Producto WHERE id_producto = ?', [id_producto])
-      .then(() => console.log('Producto eliminado'))
-      .catch(e => console.error('Error eliminando producto', e));
+// Método para eliminar un producto
+async deleteProducto(id_producto: number): Promise<void> {
+  try {
+    await this.db.executeSql('DELETE FROM Producto WHERE id_producto = ?', [id_producto]);
+    console.log('Producto eliminado');
+  } catch (e) {
+    console.error('Error eliminando producto', e);
   }
-  
-  // para mostrar productos en pagina de productos
+}
 
-  // Método para obtener producto por ID
-  getProductoById(id_producto: number): Promise<Producto> {
-    return new Promise((resolve, reject) => {
-      const query = 'SELECT * FROM Producto WHERE id_producto = ?';
-      this.db.executeSql(query, [id_producto]).then(
-        (res) => {
-          if (res.rows.length > 0) {
-            const producto: Producto = {
-              id_producto: res.rows.item(0).id_producto,
-              Nombre: res.rows.item(0).Nombre,
-              Descripcion: res.rows.item(0).Descripcion,
-              Precio: res.rows.item(0).Precio,
-              Imagen: res.rows.item(0).Imagen ? res.rows.item(0).Imagen : null // Imagen como Blob o string
-            };
-            resolve(producto);
-          } else {
-            reject('Producto no encontrado');
-          }
-        },
-        (err) => reject(err)
-      );
-    });
+// Método para obtener un producto por ID con imagen en formato Blob
+async getProductoById(id: number) {
+  const sql = 'SELECT * FROM Producto WHERE id_producto = ?';
+  const result = await this.db.executeSql(sql, [id]);
+
+  if (result.rows.length > 0) {
+      const item = result.rows.item(0);
+      return {
+          id_producto: item.id_producto,
+          Nombre: item.Nombre,
+          Descripcion: item.Descripcion,
+          Precio: item.Precio,
+          Imagen: item.Imagen // Imagen en Base64
+      };
   }
-  
-  // Método para actualizar la URL de la imagen del producto
-  setProductoImagenUrl(id_producto: number, imagen: any): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      const query = 'UPDATE Producto SET Imagen = ? WHERE id_producto = ?';
-      this.db.executeSql(query, [imagen, id_producto]).then(
-        () => resolve(),
-        (err) => reject(err)
-      );
-    });
+  return null;
+}
+
+// Método para actualizar la imagen del producto
+async setProductoImagenUrl(id_producto: number, imagen: Blob): Promise<void> {
+  const query = 'UPDATE Producto SET Imagen = ? WHERE id_producto = ?';
+  try {
+    await this.db.executeSql(query, [imagen, id_producto]);
+    console.log('Imagen del producto actualizada');
+  } catch (e) {
+    console.error('Error actualizando la imagen del producto', e);
   }
+}
+
   
   
   

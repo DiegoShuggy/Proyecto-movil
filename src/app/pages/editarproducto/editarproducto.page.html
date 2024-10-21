@@ -8,23 +8,57 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <!-- Botón para añadir producto -->
   <ion-button expand="block" (click)="confirmAddProducto()">
     Añadir Producto
   </ion-button>
 
+  <!-- Lista de productos -->
   <ion-list>
     <ion-item *ngFor="let producto of productos">
       <ion-label>
-        <ion-input [(ngModel)]="producto.Nombre" placeholder="Nombre del Producto"></ion-input>
-        <ion-input [(ngModel)]="producto.Precio" placeholder="Precio del Producto" type="number"></ion-input>
-        <ion-textarea [(ngModel)]="producto.Descripcion" placeholder="Descripción"></ion-textarea>
-        <ion-input [(ngModel)]="producto.Imagen" placeholder="URL de la Imagen"></ion-input>
+        <!-- Campo Nombre -->
+        <ion-input 
+          [(ngModel)]="producto.Nombre" 
+          required 
+          placeholder="Nombre" 
+          (focus)="producto.Nombre = ''" 
+          (blur)="producto.Nombre = producto.Nombre || 'Nombre'">
+        </ion-input>
+
+        <!-- Campo Precio -->
+        <ion-input 
+          [(ngModel)]="producto.Precio" 
+          required 
+          placeholder="Precio" 
+          type="number" 
+          (blur)="validatePrecio(producto)">
+        </ion-input>
+
+        <!-- Campo Descripción -->
+        <ion-input 
+          [(ngModel)]="producto.Descripcion" 
+          required 
+          placeholder="Descripción" 
+          (focus)="producto.Descripcion = ''" 
+          (blur)="producto.Descripcion = producto.Descripcion || 'Descripción'">
+        </ion-input>
+
+        <!-- Mostrar imagen del producto si existe -->
+        <ion-item *ngIf="producto.Imagen">
+          <img [src]="producto.Imagen" alt="Imagen del producto" />
+        </ion-item>
       </ion-label>
+
+      <!-- Botones para guardar, eliminar y tomar foto -->
       <ion-button (click)="confirmUpdateProducto(producto)">
         Guardar
       </ion-button>
       <ion-button color="danger" (click)="confirmDeleteProducto(producto)">
         Eliminar
+      </ion-button>
+      <ion-button (click)="takePicture(producto)">
+        Tomar Foto
       </ion-button>
     </ion-item>
   </ion-list>

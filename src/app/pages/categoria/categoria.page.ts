@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router'; // Agregamos Router
 import { DbService } from '../../servicios/db.service';
 import { Categoria } from '../../models/categoria';
 import { Producto } from '../../models/producto';
@@ -13,7 +13,7 @@ export class CategoriaPage implements OnInit {
   categoria: Categoria | undefined;
   productos: Producto[] = [];
 
-  constructor(private route: ActivatedRoute, private dbService: DbService) {}
+  constructor(private route: ActivatedRoute, private dbService: DbService, private router: Router) {} // Agregamos el Router aquí
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
@@ -33,10 +33,11 @@ export class CategoriaPage implements OnInit {
   }
 
   async loadProductos() {
-    try {
-      this.productos = await this.dbService.getProductos();
-    } catch (error) {
-      console.error('Error loading products:', error);
-    }
+    this.productos = await this.dbService.getProductos(); // Incluye la imagen en Base64
+  }
+
+  // Método para navegar a la página de detalles del producto
+  verProducto(id_producto: number) {
+    this.router.navigate(['/productos', id_producto]); // Redirige a la página de detalles del producto
   }
 }
