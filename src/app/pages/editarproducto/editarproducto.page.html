@@ -44,6 +44,16 @@
           (blur)="producto.Descripcion = producto.Descripcion || 'Descripción'">
         </ion-input>
 
+        <!-- Selector de categoría -->
+        <ion-item>
+          <ion-label>Categoría</ion-label>
+          <ion-select [(ngModel)]="producto.id_categoria" required>
+            <ion-select-option *ngFor="let categoria of categorias" [value]="categoria.id_categoria">
+              {{ categoria.nombre }} <!-- Asume que tienes un campo 'nombre' en tu modelo Categoria -->
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
         <!-- Mostrar imagen del producto si existe -->
         <ion-item *ngIf="producto.Imagen">
           <img [src]="producto.Imagen" alt="Imagen del producto" />

@@ -1,8 +1,8 @@
-// producto.ts
 export interface Producto {
   id_producto: number;
   Nombre: string;
-  Descripcion: string;
   Precio: number;
-  Imagen: any;  // any para que pueda trabajarse como blob la tabla y los metodos en db.service.ts 
+  Descripcion: string;
+  Imagen: Blob | string; // Puedes seguir usando Blob o string para imágenes Base64
+  id_categoria: number; // Nuevo campo para la categoría
 }

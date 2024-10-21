@@ -1,6 +1,6 @@
 // src/app/models/categoria.ts
 export class Categoria {
-  id_categoria?: number;
+  id_categoria?: number; // Mantiene como opcional ya que se autoincrementa
   nombre: string;
   imagen: string;
 
