@@ -1,6 +1,6 @@
-const OneSignal = require('onesignal-cordova-plugin');
+import OneSignal from 'onesignal-cordova-plugin'; // Usa import en lugar de require
 
-const initOneSignal = () => {
+export const initOneSignal = () => {
   OneSignal.setLogLevel(6, 0); // Para depuración, puedes ajustar esto después
   OneSignal.setAppId('29430c16-dd16-4a6f-a7fb-f085bdcb1911'); // Reemplaza con tu ID de OneSignal
   OneSignal.promptForPushNotificationsWithUserResponse();
@@ -13,5 +13,3 @@ const initOneSignal = () => {
     console.log('Notificación abierta');
   });
 };
-
-module.exports = { initOneSignal };

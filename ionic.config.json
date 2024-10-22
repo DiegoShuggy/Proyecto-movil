@@ -1,7 +1,8 @@
 {
   "name": "practica7",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {},
+    "cordova": {}
   },
   "type": "angular"
 }
