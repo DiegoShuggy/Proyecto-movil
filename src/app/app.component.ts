@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
-//import { initOneSignal } from './servicios/OneSignalConfig'; // Ruta correcta
+import { initOneSignal } from 'OneSignalConfig';
+import * as OneSignal from 'onesignal-cordova-plugin';
+
+
 
 @Component({
   selector: 'app-root',
@@ -15,7 +18,7 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-  //    initOneSignal(); // Inicializa OneSignal al estar listo el dispositivo
+ initOneSignal(); // Inicializa OneSignal al estar listo el dispositivo
     });
   }
 
